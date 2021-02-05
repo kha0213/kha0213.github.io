@@ -1,6 +1,6 @@
 # Site settings
-title: A.P
-baseurl: "/kha0213"
+title: Back-End Developer
+baseurl: "/kha0213.github.io"
 url: "https://kha0213.github.io"
 google_analytics: # Tracking ID, e.g. "UA-000000-01"
 
