@@ -3,7 +3,7 @@ layout: post
 title:  "Seoul Business Management System"
 info: "서울시 업무관리시스템 차세대 [특화기능]"
 tech : "Java 1.8, Spring, Mybatis, Cubrid 10.2, Jquery"
-type: Work
+type: Company Work
 ---
 
 ## Seoul Business Management System
@@ -21,7 +21,7 @@ SVN, git
 
 
 ## Duration
-2020. 07. 29 ~ 2021. 03. 30   
+2020.07.29 ~ 2021.03.30   
 
 
 ## Smart Work

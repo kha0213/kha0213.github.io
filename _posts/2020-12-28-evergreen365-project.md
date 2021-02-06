@@ -16,4 +16,4 @@ Java 1.8, Spring, Mybatis, Jquery, Tomcat hosting
 
 
 ## Duration
-2020. 12. 14 ~ 2020. 12. 28
+2020.12.14 ~ 2020.12.28

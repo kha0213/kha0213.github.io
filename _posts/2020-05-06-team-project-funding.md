@@ -20,4 +20,4 @@ kakao login Api, naver login Api, Daum postcode Api, SweetAlert Api
 Java 1.8, Oracle 11, Spring, Mybatis   
 
 ## Duration
-2020. 04. 09 ~ 2020. 05. 04
+2020.04.09 ~ 2020.05.04

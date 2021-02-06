@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "Long's Food"
-info: "foot sale site"
+info: "Food sale site"
 tech: "Java 1.8, Oracle 11, Jsp & Servlet, MVC, jQuery bootstrap"
-type: Team Project
+type: Toy Project
 ---
 
 ## Long's Food
@@ -23,4 +23,4 @@ jQuery, jQueryUI, bootstrap-v4.4.1, cos.jar, popper, Sweetalert, kakao.maps
 Java 1.8, Oracle 11, Jsp & Servlet, MVC, jQuery bootstrap   
 
 ## Duration
-2020. 03. 10 ~ 2020. 03. 20
+2020.03.10 ~ 2020.03.20
