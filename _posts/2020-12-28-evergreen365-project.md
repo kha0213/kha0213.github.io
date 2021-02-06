@@ -7,8 +7,8 @@ type: Outsourcing
 ---
 
 ## Create Mobile Web Project   
-This is a project for my github blog.  
-I actually created a github page, but the contents are fake.  
+홈페이지 제작 의뢰, 모바일 웹 사이트 제작   
+FileZilla, putty 를 이용하여 Cafe24, Tomcat 호스팅 사용   
 
 
 ## Tech
