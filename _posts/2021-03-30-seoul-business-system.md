@@ -2,13 +2,13 @@
 layout: post
 title:  "Seoul Business Management System"
 info: "서울시 업무관리시스템 차세대 [특화기능]"
-tech : "Java 1.8, Spring, Mybatis, Cubrid 10.2, Jquery"
+tech: "Java 1.8, Spring, Mybatis, Cubrid 10.2, Jquery"
 type: Company Work
 ---
 
 ## Seoul Business Management System
 기존의 EJB, oracle, ibatis 로 되어있던 서울시 업무관리 시스템을   
-spring, cubrid, mybatis 로 변경하며 특화기능이라는 새로운 기능 추가하는 작업을 담당하였다.    
+spring, cubrid, mybatis 로 변경하며 특화기능이라는 새로운 기능 추가하는 작업을 담당하였다.     
 
 
 ## Use Api
