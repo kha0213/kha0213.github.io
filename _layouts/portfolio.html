@@ -3,6 +3,7 @@ layout: base
 ---
 
 <div class="portfolio">
+  
   {% for post in paginator.posts %}
     <a href="{{ post.url | prepend: site.baseurl }}" class="portfolio-item">
       <div>
@@ -35,6 +36,5 @@ layout: base
   {% if paginator.next_page %}
     <a href="{{ paginator.next_page_path | prepend: site.baseurl }}" class="right next">Next</a>
   {% endif %}
-
   <span>{{ paginator.page }}</span>
 </div>
