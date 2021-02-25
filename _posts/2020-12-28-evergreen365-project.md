@@ -1,12 +1,17 @@
 ---
-layout: post
 title:  "Create Mobile Web Project"
-info: "Create evergreen365.kr homepage."
-tech: "Java 1.8, Spring, Mybatis, Jquery"
-type: Outsourcing
+categories:
+  - portfolio
+tags:
+  - portfolio
+  - toy project
+  - mobile web site
+  - Outsourcing
+search: true
 ---
 
-## Create Mobile Web Project   
+## Create Mobile Web Project  
+Create evergreen365.kr homepage.    
 홈페이지 제작 의뢰, 모바일 웹 사이트 제작   
 FileZilla, putty 를 이용하여 Cafe24, Tomcat 호스팅 사용   
 

@@ -1,16 +1,20 @@
 ---
-layout: post
-title:  "Long's Food"
-info: "Food sale site"
-tech: "Java 1.8, Oracle 11, Jsp & Servlet, MVC, jQuery bootstrap"
-type: Toy Project
+title: "Long's Food"
+header:
+  teaser: "/assets/images/portfolio/long-food-teaser.png"
+categories:
+  - portfolio
+tags:
+  - portfolio
+  - toy project
+  - web site
 ---
 
 ## Long's Food
 토이 개인 프로젝트 식품판매 사이트 구현.
 상품 검색, 정렬, 쿠폰 사용, 포인트 적립 기능 구현
 
-![Long's_Food](https://user-images.githubusercontent.com/56239469/107112841-0866ac00-689e-11eb-9402-4139ce1890c9.gif){: width="50%" height="50%"}   
+![Long's_Food]({{ site.baseurl }}/assets/images/portfolio/long_food.gif)     
 
 
 ## Git 

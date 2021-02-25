@@ -1,155 +1,626 @@
-<!DOCTYPE html>
-<html lang="ko">
-
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
   <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
 
-  <title>Back-End Developer</title>
+<!-- begin _includes/seo.html --><title>어제보다 더 나은 개발자</title>
+<meta name="description" content="I am an back-end developer.">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" type="text/css" href="/assets/css/fontawesome-all.min.css">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
-
-  <!-- Google Analytics -->
+  <meta name="author" content="Kim Young Long">
   
 
-</head>
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="어제보다 더 나은 개발자">
+<meta property="og:title" content="어제보다 더 나은 개발자">
+<meta property="og:url" content="https://kha0213.github.io/">
 
 
-  <body>
-    <nav class="nav">
-      <div class="nav-container">
-        <a href="/">
-          <h2 class="nav-title">Back-End Developer</h2>
-        </a>
-        <ul>
-          <li><a href="/">About</a></li>
-          <li><a href="/portfolio/">Portfolio</a></li>
-        </ul>
-    </div>
-  </nav>
+  <meta property="og:description" content="I am an back-end developer.">
 
-    <main>
-      <div class="about">
-  <div class="profile">
-    <img class="selfie" alt="Kim Young Long" src="assets/img/profile.jpg" />
-    <div class="info">
-      <div class="title">Kim Young Long</div>
-      <div class="description">어제보다 더 나은 개발자.</div>
-    </div>
-  </div>
 
-  <div class="content">
-    <h1 id="about-me">About Me</h1>
-<p>Java, Spring, Spring Boot, JPA, Hibernate, JavaScript … <br />
-Back-end developer
-I want to be a code minimalist. <br />
-Dreaming of a better tomorrow than yesterday.</p>
 
-<p><br /></p>
 
-<h1 id="career">Career</h1>
-<ul>
-  <li>First Company (2020/06 ~ Current)
-    <ul>
-      <li>(주)가온아이 ES 개발부 back-end developer</li>
-    </ul>
-  </li>
-</ul>
 
-<p><br /></p>
 
-<h1 id="interests">Interests</h1>
-<p>최신 기술에 대하여 이야기 하는걸 좋아합니다. <br />
-새로운 언어, 프레임워크를 배우는 것에 두려움은 없지만 <br />
-가장 자신있는 것은 Java, Spring, Jpa를 이용한 개발 입니다. <br />
-객체지향 설계와 사고에 관심있습니다.</p>
 
-    </br>
-    <div class="social-layer">
-      <div class="social-icons">
-        <ul>
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://kha0213.github.io/">
+
+
+
+  <link rel="next" href="https://kha0213.github.io/page2/">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Kim Young Long",
+      "url": "https://kha0213.github.io/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+  </head>
+
+  <body class="layout--home">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/profile/logo.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          어제보다 더 나은 개발자
           
-<li>
-  <a href="mailto:tatujjang@gmail.com" title="email">
-    <span class="fa-stack fa-lg">
-      <i class="fa fa-circle fa-stack-2x"></i>
-      <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
-    </span>
-  </a>
-</li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<li>
-  <a href="https://github.com/kha0213" title=" GitHub">
-    <span class="fa-stack fa-lg">
-      <i class="fa fa-circle fa-stack-2x"></i>
-      <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-    </span>
-  </a>
-</li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </ul>
-      </div>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/">Home</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
     </div>
   </div>
 </div>
 
-    </main>
 
-    <footer>
-      <span>
-        &copy; <time datetime="2021-02-06 17:42:20 +0900">2021</time> Kim Young Long. A.P theme by kssim.
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/profile/profile.jpg" alt="Kim Young Long" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kim Young Long</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>어제보다 더 나은 개발자.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Somewhere</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/kha0213" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/moon_maria__/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:tatujjang@gmail.com">
+            <meta itemprop="email" content="tatujjang@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title"></h1>
+    
+    
+
+<h3 class="archive__subtitle">최근 포스트</h3>
+
+
+
+
+<div class="entries-list">
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/portfolio/seoul-business-system/" rel="permalink">Seoul Business Management System
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-08T00:00:00+09:00">February 8, 2021</time>
       </span>
-    </footer>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Seoul Business Management System
+서울시 업무관리시스템 차세대 [특화기능] 
+기존의 EJB, oracle, ibatis 로 되어있던 서울시 업무관리 시스템을 
+spring, cubrid, mybatis 로 변경하며 특화기능이라는 새로운 기능 추가하는 작업을...</p>
+  </article>
+</div>
+
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/portfolio/evergreen365-project/" rel="permalink">Create Mobile Web Project
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-28T00:00:00+09:00">December 28, 2020</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Create Mobile Web Project
+Create evergreen365.kr homepage.  
+홈페이지 제작 의뢰, 모바일 웹 사이트 제작 
+FileZilla, putty 를 이용하여 Cafe24, Tomcat 호스팅 사용
+</p>
+  </article>
+</div>
+
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/portfolio/team-project-funding/" rel="permalink">CROWD FUND
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-05-06T00:00:00+09:00">May 6, 2020</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Crowd Fund
+4인 팀 프로젝트 펀딩사이트 구현.
+</p>
+  </article>
+</div>
+
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/portfolio/toy-project-LongsFood/" rel="permalink">Long’s Food
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-03-20T00:00:00+09:00">March 20, 2020</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Long’s Food
+토이 개인 프로젝트 식품판매 사이트 구현.
+상품 검색, 정렬, 쿠폰 사용, 포인트 적립 기능 구현
+</p>
+  </article>
+</div>
+
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/post/post-exclude-search/" rel="permalink">Exclude Post from Search Index
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2017-11-28T00:00:00+09:00">November 28, 2017</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This post should not appear in the search index because it has the following YAML Front Matter:
+</p>
+  </article>
+</div>
+
+  
+</div>
+
+
+<nav class="pagination">
+  
+  <ul>
+    
+    
+    <li><a href="#" class="disabled"><span aria-hidden="true">이전</span></a></li>
+    
+
+    
+    
+      <li><a href="#" class="disabled current">1</a></li>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="/page2/">2</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="/page3/">3</a></li>
+      
+    
+
+    
+    
+      <li><a href="#" class="disabled">&hellip;</a></li>
+    
+
+    
+      <li><a href="/page15/">15</a></li>
+    
+
+    
+    
+      <li><a href="/page2/">다음</a></li>
+    
+  </ul>
+</nav>
+
+
+
+  </div>
+</div>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/kha0213" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://www.instagram.com/moon_maria__/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Kim Young Long. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
   </body>
 </html>
