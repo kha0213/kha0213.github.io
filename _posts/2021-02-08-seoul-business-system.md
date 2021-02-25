@@ -6,8 +6,6 @@ categories:
 tags:
   - portfolio
   - company work
-toc: true
-toc_label: "Getting Started"
 ---
 
 ## Seoul Business Management System

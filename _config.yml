@@ -96,7 +96,9 @@ analytics:
 author:
   name             : "Kim Young Long"
   avatar           : "/assets/images/profile/profile.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "어제보다 더 나은 개발자."
+  bio              : "Java, Spring, Spring Boot, JPA, Hibernate, JavaScript …
+I'm back-end developer. I want to be a code minimalist.
+Dreaming of a better tomorrow than yesterday."
   location         : "Somewhere"
   email            : "tatujjang@gmail.com"
   links:

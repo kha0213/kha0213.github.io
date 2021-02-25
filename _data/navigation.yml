@@ -3,10 +3,14 @@ main:
   - title: "Home"
     url: /
 #  - title: "About"
-#    url: /about/
-#  - title: "Posts"
-#    url: /post/
+#    url: /my_portfolio/
+  - title: "Category"
+    url: /category/
+  - title: "Posts"
+    url: /post/
+  - title: "Tags"
+    url: /tag/
 #  - title: "Portfolio"
 #    url: /portfolio/
-#  - title: "Issue"
-#    url: /issue/
+#  - title: "Docs"
+#    url: /docs/
