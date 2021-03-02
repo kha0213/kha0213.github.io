@@ -5,7 +5,7 @@ main:
 #  - title: "About"
 #    url: /my_portfolio/
   - title: "Category"
-    url: /category/
+    url: /categories/
   - title: "Posts"
     url: /post/
   - title: "Tags"
