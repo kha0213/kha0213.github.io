@@ -1,8 +1,8 @@
 ---
-title:  "CSS_02.layout"
+title:  "CSS Layout"
 
 categories: 
-  - study
+  - css
 tags:
   - css
   - study

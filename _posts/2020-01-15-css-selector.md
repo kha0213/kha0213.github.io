@@ -1,8 +1,8 @@
 ---
-title:  "CSS_01.selector"
+title:  "CSS Selector"
 
 categories: 
-  - study
+  - css
 tags:
   - css
   - study
