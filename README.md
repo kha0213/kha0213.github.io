@@ -1,9 +1,7 @@
 # Github Blog
 
 
-### Posts
-* toc : pageDoc
-    * toc: true
-    * toc_label: "Getting Started" 
-* last_modified_at : post write day
-    * last_modified_at: 2018-07-01T12:04:24-04:00
+### 공부한 내용을 정리하기 위한 Blog입니다.
+
+* FORK (https://github.com/mmistakes/minimal-mistakes)[https://github.com/mmistakes/minimal-mistakes]
+ 
