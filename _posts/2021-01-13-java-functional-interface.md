@@ -10,10 +10,10 @@ last_modified_at: 2021-01-13T00:10:00-00:00
 ---
 
 ## Functional Interface (함수형 인터페이스)<br>
-> Functional Interface란 '구현해야 할 추상 메서드가 하나만 정의된 인터페이스'를 가리킨다.   
-> java 8 이후로 Interface 에 default 메서드로 구현하지 않아도 되는 메서드가 존재한다.   
-> Functional Interface는 추상 메서드가 단 하나인 인터페이스를 말한다.   
-> 추상 메서드가 하나여야만 람다식 적용이 가능하다.   
+* Functional Interface란 '구현해야 할 추상 메서드가 하나만 정의된 인터페이스'를 가리킨다.   
+* java 8 이후로 Interface 에 default 메서드로 구현하지 않아도 되는 메서드가 존재한다.   
+* Functional Interface는 추상 메서드가 단 하나인 인터페이스를 말한다.   
+* 추상 메서드가 하나여야만 람다식 적용이 가능하다.   
 
 ### 1. Function<T,R>
 자바 8에선 Function 객체를 이용하여 익명함수를 쉽게 구현할 수 있다.   
@@ -29,7 +29,8 @@ Function<String,Integer> toInt = new Function<String, Integer>() {
 };
 
 // 람다를 이용한 Function 함수
-final Function<String,Integer> toIntRamda = value -> Integer.parseInt(value);
+final Function<String,Integer> toIntRamda = 
+	value -> Integer.parseInt(value);
 ```
 
 ### 2. Consumer<T>
@@ -43,7 +44,8 @@ final Consumer<String> printR = new Consumer<String>() {
 };
        
 // 람다
-final Consumer<String> printR2 = value -> System.out.println("printR2:::"+value);
+final Consumer<String> printR2 = 
+	value -> System.out.println("printR2:::"+value);
 ```
 
 ### 3. Predicate<T>
@@ -51,13 +53,16 @@ final Consumer<String> printR2 = value -> System.out.println("printR2:::"+value)
 Function<T,Boolean>과도 같으나 boolean이 자주 사용되고 객체가 아닌 기본자료형을 사용 할 때 자주 쓰인다.   
 ```java
     public static void main(String[] args) {
-        List<Integer> numbers = Arrays.asList(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6);
+        List<Integer> numbers = 
+			Arrays.asList(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6);
 
         Predicate<Integer> isPositive = n -> n > 0;
-        List<Integer> positiveNumbers = filter(numbers, isPositive);
+        List<Integer> positiveNumbers = 
+			filter(numbers, isPositive);
 
         Predicate<Integer> lessThan3 = n -> n < 3;
-        List<Integer> lessThan3Numbers = filter(numbers, lessThan3);
+        List<Integer> lessThan3Numbers = 
+			filter(numbers, lessThan3);
         
         // Predicate 부분을 바로 만들어 넘겨도 된다.
         List<Integer> zeroNumber = filter(numbers, i -> i == 0);
