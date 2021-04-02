@@ -28,7 +28,7 @@ ORM 프레임워크가 중간과정에서 매핑
 JPA는 API로 RDB와 매핑하기 때문에 개발자는 CRUD보다 비즈니스로직에 집중할 수 있다.   
 
 ### How JPA Works   
-
+!jpa_works]({{ site.baseurl }}/assets/images/study/how_jpa_works.png)
 
 
 
