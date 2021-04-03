@@ -15,7 +15,7 @@ JPA는 Java Persistence API의 약자이다.
 (TIP : JPA는 인터페이스고 구현체는 보통 Java진영에선 Hibernate를 쓴다.)    
 기존 EJB의 Entity Bean을 대체하는 기술이다.   
 
-</br>
+
 
 **Note:** ORM 이란? Object Relational Mapping 즉 객체와 관계형 데이터베이의 매핑이다.     
 객체는 객체대로 설계   
@@ -23,11 +23,11 @@ JPA는 Java Persistence API의 약자이다.
 ORM 프레임워크가 중간과정에서 매핑   
 {: .notice--info}   
 
-</br>
+<br>
 
 다음 4가지 영역으로 구성되어 있다.   
 
-</br>
+
 
 ### 1. The Java Persistence API
 javax.persistance 패키지로 정의 된 API 그 자체를 말한다.   
@@ -59,7 +59,7 @@ IDE의 도움으로 compile시점 또는 build 시점에서 error를 확인 할 
 객체와 관계형 데이터 베이스를 mapping 하기 위하여 필요한 metadata를 말한다.   
 (클래스와 테이블, 속성 및 열, 연결 및 외래 키, Java 유형 및 SQL 유형 등)   
 
-</br>
+
 
 ## Why Use JPA?
 객체지향적으로 개발하기 위해서이다.   
@@ -68,7 +68,7 @@ IDE의 도움으로 compile시점 또는 build 시점에서 error를 확인 할 
 결국 설계부터 객체를 테이블에 맞추어서 모델링 하기 때문에 Java의 특성인 객체지향의 장점을 살리기 어렵다.   
 JPA는 API로 RDB와 매핑하기 때문에 개발자는 CRUD보다 비즈니스로직에 집중할 수 있다.   
 
-</br>
+<br>
 
 ## How JPA Works   
 ![jpa-structured]({{ site.baseurl }}/assets/images/study/jpa-structured.png)   
