@@ -91,7 +91,7 @@ JPA에서 기본적인 CRUD는 1~2 줄이면 끝나는데 mybatis는 파일도 �
 String memberId = "123a";
 Member member = jpa.find(Member.class, memberId);
 ```
-</br>
+<br>
 * mybatis
 ```java
 String memberId = "123a";
@@ -125,9 +125,9 @@ ORM 프레임워크는 객체와 관계형데이터베이스를 매핑하는 것
 
 ## Reference
 <div>
-* [https://docs.oracle.com/javaee/7/tutorial/partpersist.htm](https://docs.oracle.com/javaee/7/tutorial/partpersist.htm)  
-* [https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html](https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html)    
-* [https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm](https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm)   
-* [Heee's 블로그 https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html](https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html)    
-* [https://velog.io/@modsiw](https://velog.io/@modsiw/JPAJava-Persistence-API%EC%9D%98-%EA%B0%9C%EB%85%90)   
+[https://docs.oracle.com/javaee/7/tutorial/partpersist.htm](https://docs.oracle.com/javaee/7/tutorial/partpersist.htm)  
+[https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html](https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html)    
+[https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm](https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm)   
+[Heee's 블로그 https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html](https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html)    
+[https://velog.io/@modsiw](https://velog.io/@modsiw/JPAJava-Persistence-API%EC%9D%98-%EA%B0%9C%EB%85%90)   
 </div>
