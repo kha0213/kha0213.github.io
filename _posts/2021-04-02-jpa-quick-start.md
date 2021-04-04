@@ -49,7 +49,7 @@ String jpql = "select m from Member m where m.id like 'A%'";
 
 ### 3. The Java Persistence Criteria API
 java 에서 sql 쿼리를 만들 때 String이 아닌 객체화 하여 IDE 도움을 받을 수 있게 한 것을 말한다.   
-```java
+``` java
 // criteriaQuery example
 criteriaQuery.select(root)
   .where(root.get("title")
@@ -87,7 +87,7 @@ id, password, name이 있는 객체라 하더라도
 JPA에서 기본적인 CRUD는 1~2 줄이면 끝나는데 mybatis는 파일도 나누어져 있고 훨씬 많은 작업을 해야 한다.   
 
 * JPA
-```java
+``` java
 String memberId = "123a";
 Member member = jpa.find(Member.class, memberId);
 ```
@@ -124,10 +124,10 @@ ORM 프레임워크는 객체와 관계형데이터베이스를 매핑하는 것
 하지만 제대로 공부하기만 한다면 훨씬 생산성 좋고 반복작업을 줄여주는 훌륭한 프레임워크가 될 것이다.
 
 ## Reference
-<div>
+
 [https://docs.oracle.com/javaee/7/tutorial/partpersist.htm](https://docs.oracle.com/javaee/7/tutorial/partpersist.htm)  
 [https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html](https://www.vogella.com/tutorials/JavaPersistenceAPI/article.html)    
 [https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm](https://www.tutorialspoint.com/jpa/jpa_quick_guide.htm)   
 [Heee's 블로그 https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html](https://gmlwjd9405.github.io/2019/08/03/reason-why-use-jpa.html)    
 [https://velog.io/@modsiw](https://velog.io/@modsiw/JPAJava-Persistence-API%EC%9D%98-%EA%B0%9C%EB%85%90)   
-</div>
+
