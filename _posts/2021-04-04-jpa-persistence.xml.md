@@ -24,7 +24,8 @@ persistence-units은 4가지 구성으로 이루어져 있다.
 기본 설정으로 Entity manager를 얻을 수 있다. (orm.xml로 매핑이 되어 @Entity 사용 가능)
 * Data source   
 [참고 : https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/servdats.htm#BEICDGCC](https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/servdats.htm#BEICDGCC)   
-```xml
+
+``` xml
 <persistence-unit name="default" transaction-type="JTA">
     <provider>
         oracle.toplink.essentials.PersistenceProvider
@@ -37,6 +38,7 @@ persistence-units은 4가지 구성으로 이루어져 있다.
     </properties>
 </persistence-unit>
 ```
+
 * Vendor extensions   
 property를 통해 설정 정보를 변경할 수 있다.   
 [변경 property 설명 : https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm#TopLinkJDBC](https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm#TopLinkJDBC)   
