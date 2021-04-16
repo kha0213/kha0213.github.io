@@ -82,9 +82,15 @@ Target(value=TYPE)
 Target(value={METHOD,FIELD})   
 Entity와 매핑되는 Table의 primary key를 말한다.   
 사용 가능한 Type으로는 String, java.util.Date, java.sql.Date, java.math.BigDecimal, java.math.BigInteger 가 있다.   
-| Type 			| Element 			|   
-|:--------------|:------------------|
-|String         |name               |   
+<table>
+    <th>Type</th>
+    <th>Element</th>
+    <td>String</td>
+    <td>name</td>
+</table>
+| Type | Element |   
+|:-----|:-----|
+|String |name |   
 
 ### @Column
 Target(value={METHOD,FIELD})   
