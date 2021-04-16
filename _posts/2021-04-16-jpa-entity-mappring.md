@@ -68,17 +68,96 @@ Target(value=TYPE)
 ORM의 핵심 annotation이고 속성으로 name을 줄 수 있다. ( 😀default name은 class name)   
 
 ### @Table
-Target(value=TYPE)   
-| Type 			| Element 			| Description               | Default           | Optaional     |
-|:--------------|:------------------|:--------------------------|:------------------|:--------------|
-|String         |name               |테이블 명                    |                    |✔            |
-|Index[]        |indexes            |테이블의 인덱스               |                   |✔             |
-|String         |catalog            |테이블의 카탈로그             |                   |✔              |
-|String         |schema             |테이블의 스키마               |                   |✔              |
-|UniqueConstraint[]|uniqueConstraints|유일성 제약조건              |                   |✔              |
+Target(value=TYPE)    
+| Type 			| Element 			| Description               | Default           | Optaional     |   
+|:--------------|:------------------|:--------------------------|:------------------|:--------------|   
+|String         |name               |테이블 명                    |                    |✔            |  
+|Index[]        |indexes            |테이블의 인덱스               |                   |✔             |    
+|String         |catalog            |테이블의 카탈로그             |                   |✔              |    
+|String         |schema             |테이블의 스키마               |                   |✔              |   
+|UniqueConstraint[]|uniqueConstraints|유일성 제약조건              |                   |✔              |   
 
 
 ### @Id
 Target(value={METHOD,FIELD})   
-Entity와 매핑되는 Table의 primary key를 말한다. 사용 가능한 Type으로는 String, java.util.Date, java.sql.Date, java.math.BigDecimal, java.math.BigInteger 가 있다.   
+Entity와 매핑되는 Table의 primary key를 말한다.   
+사용 가능한 Type으로는 String, java.util.Date, java.sql.Date, java.math.BigDecimal, java.math.BigInteger 가 있다.   
+| Type 			| Element 			|   
+|:--------------|:------------------|
+|String         |name               |   
+
+### @Column
+Target(value={METHOD,FIELD})   
+테이블의 Column과 매핑되는 정보를 입력하는 annotation이다.   
+
+### @ManyToOne
+Target(value={METHOD,FIELD})    
+
+### @JoinColumn
+Target(value={METHOD,FIELD})   
+기본적인 Column의 속성은 다 가지고 있다.   
+
+
+### @GeneratedValue
+Target(value={METHOD,FIELD})   
+기본키 생성전략을 사용한다. (기본은 AUTO이다.)   
+
+
+### @Enumerated
+Target(value={METHOD,FIELD})   
+enum 타입을 사용한다는 주석이다.   
+enum은 ordinal로 하는 경우가 거의 없고 String으로 해줘야한다.   
+(기본이 ordinal이라서 항상 바꿔줘야 한다.)   
+
+### @Temporal
+Target(value={METHOD,FIELD})   
+날짜 타입 (java.util.Date, java.util.Calendar) 을 매핑할 때 사용한다.   
+👏**Tip: TemporalType는 DATE, TIME, TIMESTAMP 3가지 이다.**   
+
+### @Lob
+데이터베이스 BLOB, CLOB 타입과 매핑한다. 필드 타입이 문자면 CLOB 나머지는 BLOB이다.
+
+### @Transient
+Entity에서 매핑하지 않는 필드이다. 데이터 베이스에 저장, 조회가 되지 않는다.
+
+### @Access
+JPA가 엔티티에 접근하는 방식을 나타낸다. 필드접근, 프로퍼티 접근(Getter)이다. (기본은 @ID를 설정한 방식이다.)
+
+## Jpa&hibernate config setting (persistence.xml)
+jpa의 세팅방법에 대해서 알아보자.   
+[Jpa 공식 문서 : https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm#TopLinkJDBC](https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm#TopLinkJDBC)   
+[Hibernate 공식 문서 : https://docs.jboss.org/hibernate/core/3.5/reference/en/html/session-configuration.html](https://docs.jboss.org/hibernate/core/3.5/reference/en/html/session-configuration.html)   
+
+### Example
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             version="2.1">
+    <persistence-unit name="simple-jpa-application">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/jpastudy"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+            <!-- 옵션 -->
+            <!-- 콘솔에 하이버네이트가 실행하는 SQL문 출력 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <!-- SQL 출력 시 보기 쉽게 정렬 -->
+            <property name="hibernate.format_sql" value="true"/>
+            <!-- 쿼리 출력 시 주석(comments)도 함께 출력 -->
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <!-- JPA 표준에 맞춘 새로운 키 생성 전략 사용 -->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <!-- 애플리케이션 실행 시점에 데이터베이스 테이블 자동 생성 -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <!-- 이름 매핑 전략 설정 - 자바의 카멜 표기법을 테이블의 언더스코어 표기법으로 매핑
+             ex) lastModifiedDate -> last_modified_date -->
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+```
 
