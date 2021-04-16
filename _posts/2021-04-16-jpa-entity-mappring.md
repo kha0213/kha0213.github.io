@@ -71,9 +71,9 @@ ORM의 핵심 annotation이고 속성으로 name을 줄 수 있다. ( 😀defaul
 Target(value=TYPE)   
 | Type 			| Element 			| Description               | Default           | Optaional     |
 |:--------------|:------------------|:--------------------------|:------------------|:--------------|
-|String         |name               |테이블 명                   |                    |✔              |
-|Index[]        |indexes            |테이블의 인덱스               |                   |✔              |
-|String         |catalog            |테이블의 카탈로그              |                   |✔              |
+|String         |name               |테이블 명                    |                    |✔            |
+|Index[]        |indexes            |테이블의 인덱스               |                   |✔             |
+|String         |catalog            |테이블의 카탈로그             |                   |✔              |
 |String         |schema             |테이블의 스키마               |                   |✔              |
 |UniqueConstraint[]|uniqueConstraints|유일성 제약조건              |                   |✔              |
 
