@@ -77,7 +77,27 @@ orm.xml은 객체와 관계형데이터베이스 mapping을 지정하는 파일�
              version="2.1">
     <persistence-unit name="simple-jpa-application">
         <properties>
-            <!-- 속성 설정 -->
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/jpastudy"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+            <!-- 옵션 -->
+            <!-- 콘솔에 하이버네이트가 실행하는 SQL문 출력 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <!-- SQL 출력 시 보기 쉽게 정렬 -->
+            <property name="hibernate.format_sql" value="true"/>
+            <!-- 쿼리 출력 시 주석(comments)도 함께 출력 -->
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <!-- JPA 표준에 맞춘 새로운 키 생성 전략 사용 -->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <!-- 애플리케이션 실행 시점에 데이터베이스 테이블 자동 생성 -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <!-- 이름 매핑 전략 설정 - 자바의 카멜 표기법을 테이블의 언더스코어 표기법으로 매핑
+             ex) lastModifiedDate -> last_modified_date -->
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
         </properties>
     </persistence-unit>
 </persistence>
