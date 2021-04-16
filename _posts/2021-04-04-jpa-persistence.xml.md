@@ -70,6 +70,10 @@ namely, entity classes, embeddable classes, and mapped superclasses...
 orm.xml은 객체와 관계형데이터베이스 mapping을 지정하는 파일이다.   
 {: .notice--info}
 
+## Hibernate option
+[공식문서 : https://docs.jboss.org/hibernate/core/3.5/reference/en/html/session-configuration.html](https://docs.jboss.org/hibernate/core/3.5/reference/en/html/session-configuration.html)   
+
+
 ## Template
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
