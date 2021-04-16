@@ -69,45 +69,206 @@ ORM의 핵심 annotation이고 속성으로 name을 줄 수 있다. ( 😀defaul
 
 ### @Table
 Target(value=TYPE)    
-| Type 			| Element 			| Description               | Default           | Optaional     |   
-|:--------------|:------------------|:--------------------------|:------------------|:--------------|   
-|String         |name               |테이블 명                    |                    |✔            |  
-|Index[]        |indexes            |테이블의 인덱스               |                   |✔             |    
-|String         |catalog            |테이블의 카탈로그             |                   |✔              |    
-|String         |schema             |테이블의 스키마               |                   |✔              |   
-|UniqueConstraint[]|uniqueConstraints|유일성 제약조건              |                   |✔              |   
-
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Element</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Optaional</th>
+    </tr>
+    <tr>
+        <td>Index[]</td>
+        <td>indexes</td>
+        <td>테이블의 인덱스</td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>catalog</td>
+        <td>테이블의 카탈로그</td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>schema</td>
+        <td>테이블의 스키마</td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>UniqueConstraint[]</td>
+        <td>uniqueConstraints</td>
+        <td>유일성 제약조건 </td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+</table>
 
 ### @Id
 Target(value={METHOD,FIELD})   
 Entity와 매핑되는 Table의 primary key를 말한다.   
 사용 가능한 Type으로는 String, java.util.Date, java.sql.Date, java.math.BigDecimal, java.math.BigInteger 가 있다.   
-<table>
-    <th>Type</th>
-    <th>Element</th>
-    <td>String</td>
-    <td>name</td>
-</table>
-| Type | Element |   
-|:-----|:-----|
-|String |name |   
 
 ### @Column
 Target(value={METHOD,FIELD})   
 테이블의 Column과 매핑되는 정보를 입력하는 annotation이다.   
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Element</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Optaional</th>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>name</td>
+        <td>컬럼 명</td>
+        <td>field name</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>int</td>
+        <td>length</td>
+        <td>컬럼 제한길이</td>
+        <td>255(only String value)</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>unique</td>
+        <td>유니크 제약 조건</td>
+        <td>false</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>nullable</td>
+        <td>null 제약조건 </td>
+        <td>false</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>columnDefinition</td>
+        <td>DDL 생성할 때 쓰는 컬럼 정의</td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>insertable</td>
+        <td>insert 때 해당 컬럼 포함 여부</td>
+        <td>true</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>updatable</td>
+        <td>update시 해당 컬럼 포함 여부</td>
+        <td>true</td>
+        <td>✔</td>
+    </tr>
+</table>
 
 ### @ManyToOne
 Target(value={METHOD,FIELD})    
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Element</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Optaional</th>
+    </tr>
+    <tr>
+        <td>FetchType</td>
+        <td>fetch</td>
+        <td>지연로딩 or 즉시로딩</td>
+        <td>EAGER</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>optional</td>
+        <td>연결이 필수인지 여부</td>
+        <td>true</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>class</td>
+        <td>targetEntity</td>
+        <td>연결되는 Entity</td>
+        <td>field의 class</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>CascadeType[]</td>
+        <td>cascade</td>
+        <td>cascade 작업 순서</td>
+        <td></td>
+        <td>✔</td>
+    </tr>
+</table>
 
 ### @JoinColumn
 Target(value={METHOD,FIELD})   
 기본적인 Column의 속성은 다 가지고 있다.   
 
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Element</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Optaional</th>
+    </tr>
+    <tr>
+        <td>ForeignKey</td>
+        <td>foreignKey</td>
+        <td>외래키 제약조건</td>
+        <td>기본 외래 키 전략</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>referencedColumnName</td>
+        <td>외래키 참조 열의 이름</td>
+        <td>참조된 테이블 기본 키</td>
+        <td>✔</td>
+    </tr>
+</table>
 
 ### @GeneratedValue
 Target(value={METHOD,FIELD})   
 기본키 생성전략을 사용한다. (기본은 AUTO이다.)   
 
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Element</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Optaional</th>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>generator</td>
+        <td>만드는 Table 또는 Sequence 이름</td>
+        <td>기본 persistence provider 에 의해 생성된다.</td>
+        <td>✔</td>
+    </tr>
+    <tr>
+        <td>GenerationType</td>
+        <td>strategy</td>
+        <td>자동생성전략</td>
+        <td>AUTO</td>
+        <td>✔</td>
+    </tr>
+</table>
 
 ### @Enumerated
 Target(value={METHOD,FIELD})   
@@ -115,11 +276,34 @@ enum 타입을 사용한다는 주석이다.
 enum은 ordinal로 하는 경우가 거의 없고 String으로 해줘야한다.   
 (기본이 ordinal이라서 항상 바꿔줘야 한다.)   
 
+```java
+@Entity 
+public class Employee {
+		@Enumerated(EnumType.STRING)
+    private RoleType roleType;
+    ...
+    @Enumerated(EnumType.ORDINAL) // getter에 할 수도 있지만 잘 쓰지 않는다. ordinal은 enum 순서
+		public Status getStatus() {...}
+    ...
+}
+```
+
 ### @Temporal
 Target(value={METHOD,FIELD})   
 날짜 타입 (java.util.Date, java.util.Calendar) 을 매핑할 때 사용한다.   
 👏**Tip: TemporalType는 DATE, TIME, TIMESTAMP 3가지 이다.**   
 
+```java
+@Entity 
+public class User {
+		@Temporal (TemporalType.DATE)
+    private Date birthday;
+		@Temporal (TemporalType.TIME)
+    private Date alarmTime;
+		@Temporal (TemporalType.TIMESTAMP)
+    private Date writeTime;
+}
+```
 ### @Lob
 데이터베이스 BLOB, CLOB 타입과 매핑한다. 필드 타입이 문자면 CLOB 나머지는 BLOB이다.
 
