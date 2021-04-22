@@ -120,14 +120,22 @@ DB와 Console(1차 캐시)이 일치된 모습이다.
 teacherA 가 math에서 english로 변경한다고 생각해보자.   
 ```java
 Subject math = new Subject("math");
+em.persist(math);
 Teacher teacherA = new Teacher("teacherA");
-teacherA.setSubject(math);
+teacherA.addSubject(math);
 em.persist(teacherA);
 ```
 👏**addSubject(math)**
 ![entity-relationship-1]({{ site.baseurl }}/assets/images/study/entity-relationship-1.png)   
 <br>
 여기까진 잘 동작한다. teacherA의 subject를 math에서 english로 바꿔보자.
+```java
+…
+    
+Subject english = new Subject("english");
+em.persist(english);
+teacherA.addSubject(english);
+```
 ![entity-relationship-2]({{ site.baseurl }}/assets/images/study/entity-relationship-2.png)   
 기존의 teacherA의 subject는 english로 잘 바뀌었지만 양방향 관계에서 math에 여전히 teacherA가 남아있는 것을 볼 수 있다.   
 setSubject을 하기 전 기존 teacher에 subject가 있다면 지워줘야한다.   
