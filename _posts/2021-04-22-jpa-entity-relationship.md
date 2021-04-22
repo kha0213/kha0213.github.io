@@ -116,6 +116,36 @@ DB와 Console(1차 캐시)이 일치된 모습이다.
 👏**Console2**
 ![console-2]({{ site.baseurl }}/assets/images/study/console-2.png)   
 
+‼하지만 아직도 오류는 발생한다.   
+teacherA 가 math에서 english로 변경한다고 생각해보자.   
+```java
+Subject math = new Subject("math");
+Teacher teacherA = new Teacher("teacherA");
+teacherA.setSubject(math);
+em.persist(teacherA);
+```
+👏**addSubject(math)**
+![entity-relationship-1]({{ site.baseurl }}/assets/images/study/entity-relationship-1.png)   
+<br>
+여기까진 잘 동작한다. teacherA의 subject를 math에서 english로 바꿔보자.
+![entity-relationship-2]({{ site.baseurl }}/assets/images/study/entity-relationship-2.png)   
+기존의 teacherA의 subject는 english로 잘 바뀌었지만 양방향 관계에서 math에 여전히 teacherA가 남아있는 것을 볼 수 있다.   
+setSubject을 하기 전 기존 teacher에 subject가 있다면 지워줘야한다.   
+
+```java
+// 최종 메서드
+public void addSubject(Subject subject) {
+    if(this.subject != null) { // 기존에 연관관계가 있으면 삭제해야 한다.
+        this.subject.getTeacherList().remove(this);
+    }
+    setSubject(subject);
+    Set<Teacher> teacherList = subject.getTeacherList();
+    if(!teacherList.contains( subject )){
+        teacherList.add(this);
+    }
+}
+```
+이제 잘 동작하는 것을 확인 할 수 있다.   
 ## ManyToMany
 @ManyToMany   
 [공식문서 https://docs.oracle.com/javaee/7/api/javax/persistence/ManyToMany.html](https://docs.oracle.com/javaee/7/api/javax/persistence/ManyToMany.html)   
