@@ -2,13 +2,14 @@
 title:  "Linux Create MariaDB Server"
 
 categories:
-- linux
-  tags:
-- linux
-- mariaDB
-- Server
-  last_modified_at: 2021-04-27T00:40:00-00:00
+  - linux
+tags:
+  - linux
+  - mariaDB
+  - Server
+last_modified_at: 2021-04-27T00:40:00-00:00
 ---
+
 # Linux Quick start
 
 ## 1. Install WSL 

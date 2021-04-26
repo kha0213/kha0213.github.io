@@ -130,7 +130,7 @@ em.persist(teacherA);
 <br>
 여기까진 잘 동작한다. teacherA의 subject를 math에서 english로 바꿔보자.
 ```java
-…
+...
     
 Subject english = new Subject("english");
 em.persist(english);
