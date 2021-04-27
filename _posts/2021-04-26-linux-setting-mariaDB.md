@@ -7,7 +7,7 @@ tags:
   - linux
   - mariaDB
   - Server
-last_modified_at: 2021-04-27T00:40:00-00:00
+last_modified_at: 2021-04-26T00:40:00-00:00
 ---
 
 # Linux Quick start
