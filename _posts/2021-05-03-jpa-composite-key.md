@@ -20,7 +20,8 @@ JPA에서 Primary Key가 단일 키 일때는 @ID annotation으로 쉽게 가능
 1. @EmbeddedId or @IdClass 의 annotation을 붙여야한다.
 2. public 의 no-args constructor 가 있어야 한다.
 3. Serializable 를 implement 받아야 한다.
-4. equals() 와 hashCode() method를 override해야 한다. (Id Class도)
+4. equals() 와 hashCode() method를 override해야 한다. (Id Class도)   
+* (복합키의 일부 컬럼에 @GeneratedValue는 사용하지 못한다. 고 나와있지만 실제로 TEST 시 사용 가능한 경우도 있었다. )
 
 ## 1. @IdClass 
 [참고 : https://www.objectdb.com/java/jpa/entity/id](https://www.objectdb.com/java/jpa/entity/id)   
@@ -120,3 +121,23 @@ public static void logic(EntityManager em, EntityTransaction tx) throws Exceptio
 결과 : findUser = Users(usersId={1,userA}, age=33)   
 
 [참고 : 복합키로 매핑시 주의사항](https://medium.com/@SlackBeck/jpa-joincolumns-%EC%82%AC%EC%9A%A9%EC%8B%9C-%EC%A3%BC%EC%9D%98-%EC%82%AC%ED%95%AD-7bc22b98ed9b)   
+
+## 3. How use IdClass and EmbeddedId
+둘 다 장단점이 있다.   
+IdClass는 @Id annotation을 여러 개 사용하고 또 식별자 클래스에 각각의 필드명을 맞춰줘야 한다는 점.   
+EmbeddedId는 JPQL에서 객체 탐색을 더 많이 한다는 점이 있다.   
+해당 식별자 클래스가 의미가 있어 다른곳에서 사용하면 EmbeddedId, 의미 없이 복합키로서 존재하면 IdClass를 사용하면 될 것이다.   
+```java
+// IdClass
+select u.name from Users u
+// EmbeddedId
+select u.UsersId.name from Users u
+```
+
+# Error log
+* Property of @IdClass not found in entity ••• [field name] 
+  - IdClass에서의 field name과 entity의 field name이 다를 때 나타나는 에러
+* org.hibernate.PropertyAccessException: Could not set field value [Value] value by reflection [IdClass]
+  - IdClass에서 field가 entity와 같은 타입의 변수여야 한다. (이름도 같아야 한다.)
+* No part of a composite identifier may be null   
+  - 복합키 중 하나가 null일 때 발생한다.
