@@ -2,11 +2,11 @@
 title:  "JPA Composite Primary Key"
 
 categories:
-- jpa
-  tags:
-- jpa
-- study
-- jpa primary key
+	- jpa
+tags:
+	- jpa
+	- study
+	- jpa primary key
   last_modified_at: 2021-05-02T00:40:00-00:00
 ---
 
