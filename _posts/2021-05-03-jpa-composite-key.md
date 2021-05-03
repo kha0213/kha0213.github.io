@@ -7,7 +7,7 @@ tags:
 	- jpa
 	- study
 	- jpa primary key
-  last_modified_at: 2021-05-01T00:40:00-00:00
+  last_modified_at: 2021-05-03T00:40:00-00:00
 ---
 
 # JPA Composite Primary Key
