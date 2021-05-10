@@ -60,5 +60,47 @@ sudo service mysql restart <!--서버를 다시 실행시키고-->
 sudo mysql -u root -p mysql <!--이걸로 mysql이 들어가졌다.-->
 sudo mysql <!--최종 실행 -->
 ```
+😀결과
+```markdown
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 39
+Server version: 10.3.25-MariaDB-0ubuntu0.20.04.1 Ubuntu 20.04
 
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+```
+
+## 4. mariaDB setting
+[참고 : https://jdm.kr/blog/132](https://jdm.kr/blog/132)     
+```sql
+create database db_name;
+create user 'username'@'ipaddress' identified by 'password';
+grant all privileges on db_name.* to 'username'@'ipaddress';
+flush privileges;
+
+-- 확인
+select host, user from mysql.user;
+```
+😀결과
+```markdown
++--------------+---------+
+| host         | user    |
++--------------+---------+
+| (ip address) | username|
+| localhost    | root    |
++--------------+---------+
+```
+
+* 외부에서도 접속 가능하게 변경
+root 권한으로 돌아가서 /etc/mysql/mariadb.conf.d/ 폴더에서 50-server.cnf 파일 읽어서
+bind-address 부분을 0.0.0.0 으로 변경하면 외부어디에서나 접속 가능하다. (기본은 127.0.0.1)
+  
+🐤Tip : ubuntu에서 root 비밀번호 잃어버렸을 때
+1. 윈도우에서 cmd 접속
+2. 우분투 접속시 root로 접속하도록 설정 변경
+    * ubuntu.exe config --default-user root 
+3. 우분투 실행
+4. passwd 명령어로 패스워드 변경
+5. 다시 윈도우 cmd에서 내 기본계정으로 설정 변경
+    
