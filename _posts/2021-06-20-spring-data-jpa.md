@@ -28,7 +28,8 @@ Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 �
 7. @EnableJpaRepositories로 JavaConfig 기반 Repository를 구성한다. (SpringBoot에서는 어노테이션 없이 사용 가능하다.)
 
 # Getting Start Spring Data JPA
-
+1. 프로젝트 세팅
+[]()   
 
 
 ## Reference

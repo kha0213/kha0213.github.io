@@ -30,6 +30,9 @@ last_modified_at: 2021-06-06T00:40:00-00:00
    ![spring_initializr]({{ site.baseurl }}/assets/images/study/spring_initializr.png)   
 
 2. pom.xml 설정 확인
+
+😊pom.xml   
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -123,6 +126,8 @@ last_modified_at: 2021-06-06T00:40:00-00:00
 ```
 
 3. src/main/resources 밑에 application.properties 파일 생성
+😊application.properties   
+
 ```properties
 # spring datasource
 spring.datasource.driver-class-name=org.h2.Driver
