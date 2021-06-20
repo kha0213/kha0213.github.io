@@ -26,10 +26,10 @@ last_modified_at: 2021-06-06T00:40:00-00:00
 * IntelliJ IDEA
 
 😊 start!
-1. https://start.spring.io/ 에서 Java 11 선택 후 위의 Dependencies를 선택한다.
+## 1. https://start.spring.io/ 에서 Java 11 선택 후 위의 Dependencies를 선택한다.
    ![spring_initializr]({{ site.baseurl }}/assets/images/study/spring_initializr.png)   
 
-2. pom.xml 설정 확인
+## 2. pom.xml 설정 확인
 
 😊pom.xml   
 
@@ -125,7 +125,7 @@ last_modified_at: 2021-06-06T00:40:00-00:00
 
 ```
 
-3. src/main/resources 밑에 application.properties 파일 생성
+## 3. src/main/resources 밑에 application.properties 파일 생성
 😊application.properties   
 
 ```properties
@@ -158,7 +158,7 @@ spring.devtools.restart.enabled=true
 spring.devtools.livereload.enabled=true
 ```
 
-h2 서버 구동 후 확인하면 실행이 된다.
+## 4. h2 서버 구동 후 확인하면 실행이 된다.
 
 ## Reference
   
