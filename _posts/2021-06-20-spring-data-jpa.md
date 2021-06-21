@@ -77,11 +77,12 @@ public class Subject {
 ```
 
 ## 3. 인터페이스 설정
-Entity를 만들었으면 JpaRepository를 상속받는 인터페이스를 만들어보자.    
-그 인터페이스에 규칙에 맞는 메서드 명만 지으면 구현은 Spring이 해준다.
+Entity를 만들었으면 JpaRepository를 상속받는 인터페이스를 만들어보자.     
+그 인터페이스에 규칙에 맞는 메서드 명만 지으면 구현은 Spring이 해준다.   
+(작동원리는 다음 장에서 알아보자!)   
 
 👍TIP : 이름 전략   
-[공식문서 : 이름 규칙](https://docs.spring.io/spring-data/jpa/docs/2.5.1/reference/html/#repositories.query-methods.query-creation)   
+[공식문서 : 이름 규칙](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation)   
 
 😊TeacherRepository.java   
 ```java
@@ -91,7 +92,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 }
 ```
 
-👌Test.java   
+😊Test.java   
 ```java
 @Test
 void 이름으로찾기() {
@@ -103,16 +104,130 @@ void 이름으로찾기() {
 }
 ```
 
+🔑query   
+```sql
+-- JPQL
+select
+    generatedAlias0 
+from
+    Teacher as generatedAlias0 
+where
+    generatedAlias0.name like :param0 escape :param1
+
+-- SQL
+select
+    teacher0_.teacher_id as teacher_1_1_,
+    teacher0_.age as age2_1_,
+    teacher0_.name as name3_1_,
+    teacher0_.subject_id as subject_4_1_ 
+from
+    teacher teacher0_ 
+where
+    teacher0_.name like ? escape ?
+```
+
 💻console   
 ```markdown
 // 이름에 teacher만 있는 teacher조회
 teacher = Teacher(id=4, name=teacherA, age=50, subject=Subject(id=1, title=math))
 teacher = Teacher(id=5, name=teacherB, age=33, subject=Subject(id=2, title=english))
 ```
+   
+**Note:**
+JpaRepository의 자동구현 기능을 사용하려면 @EnableAutoConfiguration 의 하위 패키지여야 한다.   
+(springBoot는 @SpringBootApplication 하위 패키지면 된다)   
+{: .notice--info}   
+
+# How does Spring Data JPA Repository work?
+Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
+JPA를 추상화한 Repository와 여러 어노테이션을 기반한 기능으로 JPA를 보다 간단하게 사용가능하다.   
+![spring-data-jpa-ex]({{ site.baseurl }}/assets/images/study/spring-data-jpa-ex.png)   
+위의 예제에서 JpaRepository를 상속받고 findByNameContains() 라는 메소드 명만 지었는데 실제로 동작이 되었다.   
+🤔 구현체를 알아 보자.   
+
+```java
+•••
+System.out.println("teacherRepository = " + teacherRepository.getClass().getName());
+```
+
+💻console   
+```markdown
+teacherRepository = com.sun.proxy.$Proxy83
+```   
+class를 보니 프록시에서 만들어 준 구현체를 사용하고 있다. 디버그로 확인해보자.
+![jpaRepositoryEx]({{ site.baseurl }}/assets/images/study/capture/jpaRepositoryEx.png)    
+spring boot의 기본 구현체는 SimpleJpaRepository 이다. 분석해보자.   
+
+😊SimpleJpaRepository.java   
+
+```java
+@Repository
+@Transactional( 
+readOnly = true // 각각 메소드마다 @Transactional 따로 거는 듯하다. 전체적인 dirty checking 생략때문에 하는듯
+)
+public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T, ID> {
+    private static final String ID_MUST_NOT_BE_NULL = "The given id must not be null!";
+    private final JpaEntityInformation<T, ?> entityInformation; // T인 엔티티 정보
+    private final EntityManager em;             // 엔티티 매니저
+    private final PersistenceProvider provider; // Hibernate 같은 공급자
+    @Nullable
+    private CrudMethodMetadata metadata; 
+    private EscapeCharacter escapeCharacter; // 기본 \이다.
+    
+    
+    // Repository 구현체에서 엔티티 매니저를 사용한다.
+    public T getById(ID id) {
+        Assert.notNull(id, "The given id must not be null!");
+        return this.em.getReference(this.getDomainClass(), id);
+    }
+
+    •••
+    
+    @Transactional
+    public <S extends T> S save(S entity) {
+        Assert.notNull(entity, "Entity must not be null.");
+        if (this.entityInformation.isNew(entity)) {
+            this.em.persist(entity); // 새로운 객체면 persist 아니면 merge 한다.
+            return entity;
+        } else {
+            return this.em.merge(entity);
+        }
+    }
+    
+    // 기본적인 Query는 Criteria를 사용한다.
+    protected <S extends T> TypedQuery<S> getQuery(@Nullable Specification<S> spec, Class<S> domainClass, Sort sort) {
+        CriteriaBuilder builder = this.em.getCriteriaBuilder();
+        CriteriaQuery<S> query = builder.createQuery(domainClass);
+        Root<S> root = this.applySpecificationToCriteria(spec, domainClass, query);
+        query.select(root);
+        if (sort.isSorted()) {
+            query.orderBy(QueryUtils.toOrders(sort, root, builder));
+        }
+
+        return this.applyRepositoryMethodMetadata(this.em.createQuery(query));
+    }
+```
+
+기본적인 JPA 구현체는 엔티티매니저를 사용하고 Criteria와 em.createQuery() 로 쿼리를 만들어 준다.   
+사용자 Repository 세팅은 JpaRepositoryFactory에서 한다.
+
+😊JpaRepositoryFactory.java   
+```java
+    //RepositoryFactorySupport 추상 클래스를 상속받아 JpaRepositoryFactory 에서 getTargetRepository 으로 세팅한다.
+    protected final JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information) {
+        JpaRepositoryImplementation<?, ?> repository = this.getTargetRepository(information, this.entityManager);
+        repository.setRepositoryMethodMetadata(this.crudMethodMetadataPostProcessor.getCrudMethodMetadata());
+        repository.setEscapeCharacter(this.escapeCharacter);
+        return repository;
+    }
+```
+
+
 
 ## Reference
 [공식 https://spring.io/projects/spring-data-jpa#overview](https://spring.io/projects/spring-data-jpa#overview)   
 [가이드 https://spring.io/guides/gs/accessing-data-jpa/](https://spring.io/guides/gs/accessing-data-jpa/)   
+[Hibernate 가이드](https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html)   
 # ERROR CODE   
 가장 많이 하는 실수이다. test 클래스를 만들 때 @Transactional을 붙이지 않아 에러났다.
 💻console   
