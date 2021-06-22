@@ -29,7 +29,81 @@ Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 �
 
 # Getting Start Spring Data JPA
 ## 1. 프로젝트 세팅
-spring boot에 spring-data-jpa와 h2 database의 의존성을 추가한다.    
+### 1-1 Spring
+1. pom.xml에 spring-data-jpa와 h2 database의 의존성을 추가한다.     
+2. xml 또는 java config 로 base-package를 지정한다.   
+😊root-context.xml   
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa
+    https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+  <jpa:repositories base-package="com.test.repositories" />
+
+</beans>
+```   
+jpa:repositories 패키지의 하위 패키지에 있는 JPARepository를 인식한다.    
+(boot는 SpringBootApplication이 기본 JPARepository 패키지)    
+
+😊ApplicationConfig.java   
+```java
+@Configuration
+@EnableJpaRepositories
+@EnableTransactionManagement
+class ApplicationConfig {
+
+  @Bean
+  public DataSource dataSource() {
+
+    EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+    return builder.setType(EmbeddedDatabaseType.HSQL).build();
+  }
+
+  @Bean
+  public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+
+    HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+    vendorAdapter.setGenerateDdl(true);
+
+    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+    factory.setJpaVendorAdapter(vendorAdapter);
+    factory.setPackagesToScan("com.test.entity");
+    factory.setDataSource(dataSource());
+    return factory;
+  }
+
+  @Bean
+  public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+
+    JpaTransactionManager txManager = new JpaTransactionManager();
+    txManager.setEntityManagerFactory(entityManagerFactory);
+    return txManager;
+  }
+}
+```
+@EnableJpaRepositories : xml의 <jpa:repositories> 와 동일기능. 해당 패키지 하위의 패키지를 JpaRepository로 인식한다.   
+entityManagerFactory의 리턴 객체로 LocalContainerEntityManagerFactoryBean를 사용해야 한다. (EntityManagerFactory 생성 외에도 예외 변환 매커니즘에 사용되기 때문에)   
+
+👍TIP   
+기본적으로 JPA repository는 Spring Bean이고 싱글톤이며 애플리케이션 로딩 시점에 초기화 된다.   
+로딩 시점에 검증, 메타데이터 분석 (구현체 자동생성) 을 한다.   
+EntityManagerFactory는 생성시 시간이 오래 걸리기 때문에 Spring Framework의 백그라운드 스레드에서 동작한다.   
+이를 효과적으로 활용하려면 JPA저장소를 가능한 한 늦게 초기화 해야 한다.   
+
+👍TIP : Bootstrap Mode
+Spring Data JPA 2.1부터 Bootstrap Mode 모드를 지원한다. 아래 3가지 변수를 지정 할 수 있다.   
+* DEFAULT (default) : @LAZY 달지 않는 한 실제 객체를 가져온다. 
+* LAZY : 모든 Repository의 Bean에게 LAZY를 선언하고 프록시 객체가 주입되도록 한다. 
+* DEFERRED : 기본적으로 작동방식은 LAZY랑 비슷하지만 ContextRefreshedEvent 할 때 저장소 초기화 트리거에서 검증한다. (애플리케이션 로딩 전에 검증한다.)
+
+### 1-2 Spring Boot
+spring boot는 기본설정이 되어있기 때문에 의존성만 추가하면 된다.   
+pom.xml에 spring-data-jpa와 h2 database의 의존성을 추가한다.    
 😊참고 제 프로젝트 세팅   
 [spring-boot setting](https://kha0213.github.io/jpa/jpa-toy-project/#project-setting)
 
@@ -80,9 +154,6 @@ public class Subject {
 Entity를 만들었으면 JpaRepository를 상속받는 인터페이스를 만들어보자.     
 그 인터페이스에 규칙에 맞는 메서드 명만 지으면 구현은 Spring이 해준다.   
 (작동원리는 다음 장에서 알아보자!)   
-
-👍TIP : 이름 전략   
-[공식문서 : 이름 규칙](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation)   
 
 😊TeacherRepository.java   
 ```java
@@ -137,6 +208,153 @@ teacher = Teacher(id=5, name=teacherB, age=33, subject=Subject(id=2, title=engli
 JpaRepository의 자동구현 기능을 사용하려면 @EnableAutoConfiguration 의 하위 패키지여야 한다.   
 (springBoot는 @SpringBootApplication 하위 패키지면 된다)   
 {: .notice--info}   
+
+# JPA Repository Function
+
+## 1. Query Creation
+위의 예제에서 findByNameContains() 메서드 구현 방법이다.   
+JPARepository 인터페이스만 상속받고 지정된 메서드명만 선언하면 구현은 Spring에게 할당하는 방식이다.   
+쿼리를 아예 작성 안 해도 Spring이 해주기 때문에 편리하나 기본적인 쿼리 위주로 사용한다.   
+
+
+👍TIP : 이름 전략 : find•••By~ (•••에는 아무거나 들어가도 된다.)   
+[공식문서 : 이름 규칙](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation)   
+
+<table>
+    <tr>
+        <th>Keyword</th>
+        <th>Sample</th>
+        <th>JPQL snippet</th>
+    </tr>
+    <tr>
+        <td>Distinct</td>
+        <td>findDistinctByLastnameAndFirstname</td>
+        <td>select distinct … where x.lastname = ?1 and x.firstname = ?2</td>
+    </tr>
+    <tr>
+        <td>And</td>
+        <td>findByLastnameAndFirstname</td>
+        <td>… where x.lastname = ?1 and x.firstname = ?2</td>
+    </tr>
+    <tr>
+        <td>Or</td>
+        <td>findByLastnameOrFirstname</td>
+        <td>… where x.lastname = ?1 or x.firstname = ?2</td>
+    </tr>
+    <tr>
+        <td>Is, Equals</td>
+        <td>findByFirstname,findByFirstnameIs,findByFirstnameEquals</td>
+        <td>… where x.firstname = ?1</td>
+    </tr>
+    <tr>
+        <td>Between</td>
+        <td>findByStartDateBetween</td>
+        <td>… where x.startDate between ?1 and ?2</td>
+    </tr>
+    <tr>
+        <td>LessThan</td>
+        <td>findByAgeLessThan</td>
+        <td>… where x.age &lt; ?1</td>
+    </tr>
+    <tr>
+        <td>LessThanEqual</td>
+        <td>findByAgeLessThanEqual</td>
+        <td>… where x.age &lt;= ?1</td>
+    </tr>
+    <tr>
+        <td>GreaterThan</td>
+        <td>findByAgeGreaterThan</td>
+        <td>… where x.age &gt; ?1</td>
+    </tr>
+    <tr>
+        <td>GreaterThanEqual</td>
+        <td>findByAgeGreaterThanEqual</td>
+        <td>… where x.age &gt;= ?1</td>
+    </tr>
+    <tr>
+        <td>After</td>
+        <td>findByStartDateAfter</td>
+        <td>… where x.startDate &gt; ?1</td>
+    </tr>
+    <tr>
+        <td>Before</td>
+        <td>findByStartDateBefore</td>
+        <td>… where x.startDate &lt; ?1</td>
+    </tr>
+    <tr>
+        <td>IsNull, Null</td>
+        <td>findByAge(Is)Null</td>
+        <td>… where x.age is null</td>
+    </tr>
+    <tr>
+        <td>IsNotNull, NotNull</td>
+        <td>findByAge(Is)NotNull</td>
+        <td>… where x.age not null</td>
+    </tr>
+    <tr>
+        <td>Like</td>
+        <td>findByFirstnameLike</td>
+        <td>… where x.firstname like ?1</td>
+    </tr>
+    <tr>
+        <td>NotLike</td>
+        <td>findByFirstnameNotLike</td>
+        <td>… where x.firstname not like ?1</td>
+    </tr>
+    <tr>
+        <td>StartingWith</td>
+        <td>findByFirstnameStartingWith</td>
+        <td>… where x.firstname like ?1 (parameter bound with appended %)</td>
+    </tr>
+    <tr>
+        <td>EndingWith</td>
+        <td>findByFirstnameEndingWith</td>
+        <td>… where x.firstname like ?1 (parameter bound with prepended %)</td>
+    </tr>
+    <tr>
+        <td>Containing</td>
+        <td>findByFirstnameContaining</td>
+        <td>… where x.firstname like ?1 (parameter bound wrapped in %)</td>
+    </tr>
+    <tr>
+        <td>OrderBy</td>
+        <td>findByAgeOrderByLastnameDesc</td>
+        <td>… where x.age = ?1 order by x.lastname desc</td>
+    </tr>
+    <tr>
+        <td>Not</td>
+        <td>findByLastnameNot</td>
+        <td>… where x.lastname &lt;&gt; ?1</td>
+    </tr>
+    <tr>
+        <td>In</td>
+        <td>findByAgeIn(Collection ages)</td>
+        <td>… where x.age in ?1</td>
+    </tr>
+    <tr>
+        <td>NotIn</td>
+        <td>findByAgeNotIn(Collection ages)</td>
+        <td>… where x.age not in ?1</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>findByActiveTrue()</td>
+        <td>… where x.active = true</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>findByActiveFalse()</td>
+        <td>… where x.active = false</td>
+    </tr>
+    <tr>
+        <td>IgnoreCase</td>
+        <td>findByFirstnameIgnoreCase</td>
+        <td>… where UPPER(x.firstname) = UPPER(?1)</td>
+    </tr>
+</table>
+
+## 2. Named Query
+
 
 # How does Spring Data JPA Repository work?
 Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
@@ -222,7 +440,12 @@ public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T
     }
 ```
 
-
+👍TIP : 엔티티 상태 탐지 전략 (신규 or 기존)   
+* Version-Property and Id-Property inspection (default): 
+  기본적으로 Spring Data JPA는 1. Version-Property를 탐지하고 2. @ID를 탐지한다. 
+  (✨null이면 새로운 엔티티)   
+* Implementing Persistable: 만약 엔티티가 Persistable을 구현했다면 isNew() 라는 메서드를 정의하여 판별한다.   
+* Implementing EntityInformation: SimpleJpaRepository를 상속받는 클래스를 생성하고 getEntity를 Override하여 커스터마이징 가능하다. (JpaRepositoryFactory 구현도 Bean 등록)   
 
 ## Reference
 [공식 https://spring.io/projects/spring-data-jpa#overview](https://spring.io/projects/spring-data-jpa#overview)   
