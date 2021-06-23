@@ -33,6 +33,7 @@ Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 �
 1. pom.xml에 spring-data-jpa와 h2 database의 의존성을 추가한다.     
 2. xml 또는 java config 로 base-package를 지정한다.   
 😊root-context.xml   
+<br>   
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -51,6 +52,7 @@ jpa:repositories 패키지의 하위 패키지에 있는 JPARepository를 인식
 (boot는 SpringBootApplication이 기본 JPARepository 패키지)    
 
 😊ApplicationConfig.java   
+
 ```java
 @Configuration
 @EnableJpaRepositories
@@ -243,7 +245,7 @@ JPARepository 인터페이스만 상속받고 지정된 메서드명만 선언�
     </tr>
     <tr>
         <td>Is, Equals</td>
-        <td>findByFirstname,findByFirstnameIs,findByFirstnameEquals</td>
+        <td>findByFirstname,<br>findByFirstnameIs,<br>findByFirstnameEquals</td>
         <td>… where x.firstname = ?1</td>
     </tr>
     <tr>
@@ -354,7 +356,81 @@ JPARepository 인터페이스만 상속받고 지정된 메서드명만 선언�
 </table>
 
 ## 2. Named Query
+named Query는 로딩시점에 EntityManager에 쿼리를 저장한다. 실행 시 해당 쿼리를 구성하여 실행 할 수 있다.
+* 정적 쿼리를 미리 지정해서 사용할 수 있다.   
+* <strong>애플리케이션 로딩 시점</strong>에 문법 오류를 확인 할 수 있다.
 
+😊Teacher.java    
+```java
+@Entity
+@NamedQuery(
+        name = "Teacher.findByName",
+        query = "select t from Teacher as t where t.name = :name"
+)
+@NamedNativeQuery( // Native 쿼리도 가능하다.
+    name = "Teacher.findNativeByName",
+    query = "select name from Teacher where name = :name"
+)
+public class Teacher {
+    •••
+```
+NamedQuery는 관례상 엔티티명.메소드명을 적어주는것이 좋다. (Spring Data JPA에서 자동으로 찾아간다.)   
+위와 같이 선언하면 JPA에서는 아래와 같이 사용 할 수 있다.
+
+😊Test.java
+```java
+@Test
+void namedQueryInJpa() {
+    List<Teacher> teachers = em.createNamedQuery("Teacher.findByName",Teacher.class)
+            .setParameter("name","teacherA")
+            .getResultList();
+    assertThat(teachers.size()).isEqualTo(1);
+    assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
+}
+
+@Test
+void namedNativeQueryInJpa() {
+    List<Teacher> teachers = em.createNativeQuery("Teacher.findNativeByName",Teacher.class)
+            .setParameter("name","teacherA")
+            .getResultList();
+    assertThat(teachers.size()).isEqualTo(1);
+    assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
+}
+
+```
+Spring Data Jpa에서는 더 간단하게 사용가능하다.      
+👍TIP : 꼭 동적변수에는 @Param 어노테이션을 붙여야 한다.   
+<br>
+
+😊TeacherRepository.java   
+```java
+public interface TeacherRepository extends JpaRepository<Teacher, Long> {
+    Teacher findById(long id);
+    List<Teacher> findByNameContains(String name);
+
+    //NamedQuery
+    List<Teacher> findByName(@Param("name") String name);
+    //NamedNativeQuery
+    List<Teacher> findNativeByName(@Param("name") String name);
+}
+```
+
+😊Test.java   
+```java
+@Test
+void namedQuery() {
+    List<Teacher> teachers = teacherRepository.findByName("teacherA");
+    assertThat(teachers.size()).isEqualTo(1);
+    assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
+}
+
+@Test
+void namedNativeQuery() {
+    List<Teacher> teachers = teacherRepository.findNativeByName("teacherA",Teacher.class);
+    assertThat(teachers.size()).isEqualTo(1);
+    assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
+}
+```
 
 # How does Spring Data JPA Repository work?
 Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
