@@ -440,14 +440,15 @@ NamedQuery는 어플리케이션 로딩시점에 에러를 확인 할 수 있다
 복잡한 실무에서는 한 번 더 검색을 해야만 찾을 수 있다. 하지만 @Query는 NamedQuery와 같은 기능에 더 간단한 작성으로 구현 가능하다.   
 (익명의 NamedQuery라고 보면 된다.)
 <br>   
-😊TeacherRepository.java   
+
+😊TeacherRepository.java    
 ```java
 @Query("select t from Teacher as t where t.age > :age")
 List<Teacher> findQueryByAgeGreaterThan(@Param("age") int age);
 ```
 이걸로 선언 끝이다.   
 
-😊Test.java
+😊Test.java   
 ```java
 @Test
 void findQueryByAgeGreaterThanTest() {
@@ -456,7 +457,7 @@ void findQueryByAgeGreaterThanTest() {
 }
 ```
 
-😊Query.java
+😊Query.java   
 ```java
 public @interface Query {
     String value() default "";
@@ -470,7 +471,8 @@ public @interface Query {
 
 ## 4. Return Type
 [🧷 참고 : 공식문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types)    
-Spring Data Jpa는 다양한 리턴 타입을 제공한다. 상황에 맞게 원하는 타입을 변환하는작업이 간단하다. 몇 가지만 알아보자.   
+Spring Data Jpa는 다양한 <strong>리턴 타입</strong>을 제공한다. 상황에 맞게 원하는 타입을 변환하는작업이 간단하다.   
+<br>
 
 <table>
     <tr>
@@ -491,22 +493,22 @@ Spring Data Jpa는 다양한 리턴 타입을 제공한다. 상황에 맞게 원
         </td>
     </tr>
     <tr>
-        <td>T, Optional<T> (one result)</td>
+        <td>T, Optional (one result)</td>
         <td>기본 엔티티 리턴도 가능하다. (여러건시 에러)</td>
     </tr>
     <tr>
-        <td>Collection<T></td>
+        <td>Collection</td>
         <td>List, Collection, Iterator처럼 컬렉션.</td>
     </tr>
     <tr>
         <td>
-            Future<T><br>
-            CompletableFuture<T>
+            Future<br>
+            CompletableFuture
         </td>
         <td>@Async 와 함께 사용하면 동기화가 가능하다.</td>
     </tr>
     <tr>
-        <td>Page<T>, Slice<T></td>
+        <td>Page, Slice</td>
         <td>페이징을 위한 객체 리턴이 가능하다. (Pageable 파라미터 필요)</td>
     </tr>
 </table>
@@ -727,8 +729,9 @@ public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T
 [공식 https://spring.io/projects/spring-data-jpa#overview](https://spring.io/projects/spring-data-jpa#overview)   
 [가이드 https://spring.io/guides/gs/accessing-data-jpa/](https://spring.io/guides/gs/accessing-data-jpa/)   
 [Hibernate 가이드](https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html)   
+
 # ERROR CODE   
-1. TransactionRequiredException : No EntityManager with actual transaction 
+1. TransactionRequiredException : No EntityManager with actual transaction    
 💻console      
 ```markdown
 javax.persistence.TransactionRequiredException: 
@@ -736,10 +739,11 @@ No EntityManager with actual transaction available for current thread
 - cannot reliably process 'persist' call
 •••
 ```
-가장 많이 하는 실수이다. test 클래스를 만들 때 @Transactional을 붙이지 않아 에러났다.   
+가장 많이 하는 실수이다. test 클래스를 만들 때 @Transactional을 붙이지 않아 에러났다.    
 
-2. IllegalArgumentException: Could not locate named parameter
+2. IllegalArgumentException: Could not locate named parameter   
 😊Test.java     
+
 ```java
 @Test
 void namedNativeQueryInJpa() {
@@ -749,7 +753,9 @@ void namedNativeQueryInJpa() {
     assertThat(teachers.size()).isEqualTo(1);
 }
 ```
+
 💻console     
+
 ```markdown
 java.lang.IllegalArgumentException: Could not locate named parameter [name], expecting one of []
 
@@ -757,22 +763,25 @@ java.lang.IllegalArgumentException: Could not locate named parameter [name], exp
 	at org.hibernate.query.internal.ParameterMetadataImpl.getQueryParameter(ParameterMetadataImpl.java:198)
 •••	
 ```
-em.createNativeQuery에서 정의된 이름이 아니라 직접 쿼리를 넣으니 테스트 성공했다.
+em.createNativeQuery에서 정의된 이름이 아니라 직접 쿼리를 넣으니 테스트 성공했다.   
 
-3.ClassCastException : cannot be cast to class
+3.ClassCastException : cannot be cast to class    
+ 
 ```markdown
 java.lang.ClassCastException: class [Ljava.lang.Object; 
 cannot be cast to class com.example.springdatajpa.entity.Teacher 
 ([Ljava.lang.Object; is in module java.base of loader 'bootstrap'; 
 com.example.springdatajpa.entity.Teacher is in unnamed module of loader 'app')
 ```
+
 em.createNativeQuery에서 두번째 인자로 리턴 클래스를 주지 않아 발생했다.   
    
-4. IllegalStateException: Paging query needs to have a Pageable parameter!
+4. IllegalStateException: Paging query needs to have a Pageable parameter!   
+
 ```markdown
 Caused by: java.lang.IllegalArgumentException: 
 Paging query needs to have a Pageable parameter! 
 Offending method public abstract org.springframework.data.domain.Page 
 com.example.springdatajpa.repository.TeacherRepository.findPageAll()
 ```
-Page로 리턴받았는데 Pageable 파라미터를 받지 않았다.
+Page로 리턴받았는데 Pageable 파라미터를 받지 않았다.(Page, Slice리턴은 필수로 받아야한다.)   
