@@ -32,8 +32,9 @@ Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 �
 ### 1-1 Spring
 1. pom.xml에 spring-data-jpa와 h2 database의 의존성을 추가한다.     
 2. xml 또는 java config 로 base-package를 지정한다.   
-😊root-context.xml   
 <br>   
+   
+😊root-context.xml   
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -47,7 +48,8 @@ Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 �
   <jpa:repositories base-package="com.test.repositories" />
 
 </beans>
-```   
+```
+
 jpa:repositories 패키지의 하위 패키지에 있는 JPARepository를 인식한다.    
 (boot는 SpringBootApplication이 기본 JPARepository 패키지)    
 
@@ -88,7 +90,7 @@ class ApplicationConfig {
   }
 }
 ```
-@EnableJpaRepositories : xml의 <jpa:repositories> 와 동일기능. 해당 패키지 하위의 패키지를 JpaRepository로 인식한다.   
+@EnableJpaRepositories : xml의 &lt;jpa:repositories&gt; 와 동일기능. 해당 패키지 하위의 패키지를 JpaRepository로 인식한다.   
 entityManagerFactory의 리턴 객체로 LocalContainerEntityManagerFactoryBean를 사용해야 한다. (EntityManagerFactory 생성 외에도 예외 변환 매커니즘에 사용되기 때문에)   
 
 👍TIP   
@@ -382,19 +384,19 @@ NamedQuery는 관례상 엔티티명.메소드명을 적어주는것이 좋다. 
 @Test
 void namedQueryInJpa() {
     List<Teacher> teachers = em.createNamedQuery("Teacher.findByName",Teacher.class)
-            .setParameter("name","teacherA")
-            .getResultList();
+        .setParameter("name","teacherA")
+        .getResultList();
     assertThat(teachers.size()).isEqualTo(1);
     assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
 }
 
 @Test
 void namedNativeQueryInJpa() {
-    List<Teacher> teachers = em.createNativeQuery("Teacher.findNativeByName",Teacher.class)
-            .setParameter("name","teacherA")
-            .getResultList();
+    //Teacher.findNativeByName 은 안된다.
+    List<Teacher> teachers = em.createNativeQuery("select * from Teacher where name = :name",Teacher.class)
+        .setParameter("name","teacherA")
+        .getResultList();
     assertThat(teachers.size()).isEqualTo(1);
-    assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
 }
 
 ```
@@ -426,10 +428,208 @@ void namedQuery() {
 
 @Test
 void namedNativeQuery() {
-    List<Teacher> teachers = teacherRepository.findNativeByName("teacherA",Teacher.class);
+    List<Teacher> teachers = teacherRepository.findNativeByName("teacherA");
     assertThat(teachers.size()).isEqualTo(1);
     assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
 }
+```
+
+## 3. Query Annotation
+NamedQuery는 어플리케이션 로딩시점에 에러를 확인 할 수 있다는 장점이 있으나 엔티티 위에 어노테이션으로 작성해야 한다는 부담이 있다.   
+(여러개면 @NamedQueries 안에 작성 필요하다.)    
+복잡한 실무에서는 한 번 더 검색을 해야만 찾을 수 있다. 하지만 @Query는 NamedQuery와 같은 기능에 더 간단한 작성으로 구현 가능하다.   
+(익명의 NamedQuery라고 보면 된다.)
+<br>   
+😊TeacherRepository.java   
+```java
+@Query("select t from Teacher as t where t.age > :age")
+List<Teacher> findQueryByAgeGreaterThan(@Param("age") int age);
+```
+이걸로 선언 끝이다.   
+
+😊Test.java
+```java
+@Test
+void findQueryByAgeGreaterThanTest() {
+    List<Teacher> teachers = teacherRepository.findQueryByAgeGreaterThan(40);
+    assertThat(teachers.size()).isEqualTo(2);
+}
+```
+
+😊Query.java
+```java
+public @interface Query {
+    String value() default "";
+    String countQuery() default ""; // Page에서 countQuery위한 것
+    String countProjection() default "";
+    boolean nativeQuery() default false;
+    String name() default "";
+    String countName() default "";
+}
+```
+
+## 4. Return Type
+[🧷 참고 : 공식문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types)    
+Spring Data Jpa는 다양한 리턴 타입을 제공한다. 상황에 맞게 원하는 타입을 변환하는작업이 간단하다. 몇 가지만 알아보자.   
+
+<table>
+    <tr>
+        <th>Return type</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>void</td>
+        <td>리턴이 없다.</td>
+    </tr>
+    <tr>
+        <td>
+            Primitives<br>
+            Wrapper types
+        </td>
+        <td>
+            기본형이나 Wrapper 클래스 다 가능하다. (int, Integer, Long...)
+        </td>
+    </tr>
+    <tr>
+        <td>T, Optional<T> (one result)</td>
+        <td>기본 엔티티 리턴도 가능하다. (여러건시 에러)</td>
+    </tr>
+    <tr>
+        <td>Collection<T></td>
+        <td>List, Collection, Iterator처럼 컬렉션.</td>
+    </tr>
+    <tr>
+        <td>
+            Future<T><br>
+            CompletableFuture<T>
+        </td>
+        <td>@Async 와 함께 사용하면 동기화가 가능하다.</td>
+    </tr>
+    <tr>
+        <td>Page<T>, Slice<T></td>
+        <td>페이징을 위한 객체 리턴이 가능하다. (Pageable 파라미터 필요)</td>
+    </tr>
+</table>
+
+Page와 Slice 리턴을 알아보자. Page는 count 쿼리가 추가로 실행되고 Slice는 +1 조회로 다음페이지 존재 여부만 알 수 있다.   
+
+### 4-1 Page
+😊TeacherRepository.java
+```java
+Page<Teacher> findPageAllBy(Pageable pageable);
+```
+기존 문법대로 find~~By 로 조건 없이 조회하였다.   
+😊Test.java
+```java
+@Test
+void findPageAllBy() {
+    teacherRepository.deleteAll(); // 기본메서드
+    List<Teacher> teachers = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+        teachers.add(new Teacher("tea"+i, i));
+    }
+    teacherRepository.saveAllAndFlush(teachers); // 기본 메서드
+    // 페이지는 0부터 시작이다. 3페이지이고 1페이지당 5개씩, 정렬하여 조회하였다.
+    Page<Teacher> teacherPage = teacherRepository.findPageAllBy(PageRequest.of(2, 5, Sort.by("age").ascending()));
+
+    System.out.println("teacherPage = " + teacherPage.getTotalElements()); // 총 행 갯수
+    System.out.println("teacherPage.getTotalPages() = " + teacherPage.getTotalPages()); // 총 페이지 수
+    for (Teacher teacher : teacherPage.getContent()) { // List 출력이다.
+        System.out.println("teacher = " + teacher);
+    }
+```
+
+🔑query   
+```sql
+    /* select
+        generatedAlias0 
+    from
+        Teacher as generatedAlias0 
+    order by
+        generatedAlias0.age asc */ 
+    select
+        teacher0_.teacher_id as teacher_1_1_,
+        teacher0_.age as age2_1_,
+        teacher0_.name as name3_1_,
+        teacher0_.subject_id as subject_4_1_ 
+    from
+        teacher teacher0_ 
+    order by
+        teacher0_.age asc limit ? offset ?
+
+    /* select
+        count(generatedAlias0) 
+    from
+        Teacher as generatedAlias0 */ 
+    select
+        count(teacher0_.teacher_id) as col_0_0_ 
+    from
+        teacher teacher0_
+```
+
+count 쿼리까지 추가로 나간 것을 알 수 있다. (count는 자동 성능 최적화 지원)
+
+💻console   
+```markdown
+teacherPage = 100
+teacherPage.getTotalPages() = 20
+teacher = Teacher(id=17, name=tea10, age=10, subject=null)
+teacher = Teacher(id=18, name=tea11, age=11, subject=null)
+teacher = Teacher(id=19, name=tea12, age=12, subject=null)
+teacher = Teacher(id=20, name=tea13, age=13, subject=null)
+teacher = Teacher(id=21, name=tea14, age=14, subject=null)
+
+```
+
+Slice는 기존 쿼리보다 +1 하여 다음 페이지 존재 여부만 체크한다. (count 없어 성능 유리)   
+
+😊TeacherRepository.java   
+```java
+Slice<Teacher> findSliceAllBy(Pageable pageable);
+```
+
+😊Test.java   
+
+```java
+@Test
+void sliceTest() {
+    teacherRepository.deleteAll();
+    List<Teacher> teachers = new ArrayList<>();
+    for (int i = 0; i < 20; i++) {
+        teachers.add(new Teacher("tea"+i, i));
+    }
+    teacherRepository.saveAllAndFlush(teachers);
+    Slice<Teacher> teacherSlice = teacherRepository.findSliceAllBy(PageRequest.of(3, 4, Sort.by("age").ascending()));
+    Slice<TeacherDto> dtos = teacherSlice.map(t -> new TeacherDto(t.getName(),t.getAge(),""));
+    for (TeacherDto dto : dtos) {
+        System.out.println("dto = " + dto);
+    }
+}
+```
+🔑query   
+```sql
+/* select
+        generatedAlias0
+    from
+        Teacher as generatedAlias0
+    order by
+        generatedAlias0.age asc */ 
+select
+    teacher0_.teacher_id as teacher_1_1_,
+    teacher0_.age as age2_1_,
+    teacher0_.name as name3_1_,
+    teacher0_.subject_id as subject_4_1_
+from
+    teacher teacher0_
+order by
+    teacher0_.age asc limit ? offset ?
+```
+💻console   
+```markdown
+dto = TeacherDto(name=tea12, age=12, subjectName=)
+dto = TeacherDto(name=tea13, age=13, subjectName=)
+dto = TeacherDto(name=tea14, age=14, subjectName=)
+dto = TeacherDto(name=tea15, age=15, subjectName=)
 ```
 
 # How does Spring Data JPA Repository work?
@@ -528,12 +728,51 @@ public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T
 [가이드 https://spring.io/guides/gs/accessing-data-jpa/](https://spring.io/guides/gs/accessing-data-jpa/)   
 [Hibernate 가이드](https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html)   
 # ERROR CODE   
-가장 많이 하는 실수이다. test 클래스를 만들 때 @Transactional을 붙이지 않아 에러났다.
-💻console   
+1. TransactionRequiredException : No EntityManager with actual transaction 
+💻console      
 ```markdown
 javax.persistence.TransactionRequiredException: 
 No EntityManager with actual transaction available for current thread 
 - cannot reliably process 'persist' call
 •••
 ```
+가장 많이 하는 실수이다. test 클래스를 만들 때 @Transactional을 붙이지 않아 에러났다.   
+
+2. IllegalArgumentException: Could not locate named parameter
+😊Test.java     
+```java
+@Test
+void namedNativeQueryInJpa() {
+    List<Teacher> teachers = em.createNativeQuery("Teacher.findNativeByName",Teacher.class)
+            .setParameter("name","teacherA")
+            .getResultList();
+    assertThat(teachers.size()).isEqualTo(1);
+}
+```
+💻console     
+```markdown
+java.lang.IllegalArgumentException: Could not locate named parameter [name], expecting one of []
+
+	at org.hibernate.query.internal.ParameterMetadataImpl.getNamedParameterDescriptor(ParameterMetadataImpl.java:229)
+	at org.hibernate.query.internal.ParameterMetadataImpl.getQueryParameter(ParameterMetadataImpl.java:198)
+•••	
+```
+em.createNativeQuery에서 정의된 이름이 아니라 직접 쿼리를 넣으니 테스트 성공했다.
+
+3.ClassCastException : cannot be cast to class
+```markdown
+java.lang.ClassCastException: class [Ljava.lang.Object; 
+cannot be cast to class com.example.springdatajpa.entity.Teacher 
+([Ljava.lang.Object; is in module java.base of loader 'bootstrap'; 
+com.example.springdatajpa.entity.Teacher is in unnamed module of loader 'app')
+```
+em.createNativeQuery에서 두번째 인자로 리턴 클래스를 주지 않아 발생했다.   
    
+4. IllegalStateException: Paging query needs to have a Pageable parameter!
+```markdown
+Caused by: java.lang.IllegalArgumentException: 
+Paging query needs to have a Pageable parameter! 
+Offending method public abstract org.springframework.data.domain.Page 
+com.example.springdatajpa.repository.TeacherRepository.findPageAll()
+```
+Page로 리턴받았는데 Pageable 파라미터를 받지 않았다.
