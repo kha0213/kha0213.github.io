@@ -383,9 +383,10 @@ NamedQuery는 관례상 엔티티명.메소드명을 적어주는것이 좋다. 
 ```java
 @Test
 void namedQueryInJpa() {
-    List<Teacher> teachers = em.createNamedQuery("Teacher.findByName",Teacher.class)
-        .setParameter("name","teacherA")
-        .getResultList();
+    List<Teacher> teachers = 
+        em.createNamedQuery("Teacher.findByName",Teacher.class)
+            .setParameter("name","teacherA")
+            .getResultList();
     assertThat(teachers.size()).isEqualTo(1);
     assertThat(teachers.get(0).getName()).isEqualTo("teacherA");
 }
@@ -393,7 +394,8 @@ void namedQueryInJpa() {
 @Test
 void namedNativeQueryInJpa() {
     //Teacher.findNativeByName 은 안된다.
-    List<Teacher> teachers = em.createNativeQuery("select * from Teacher where name = :name",Teacher.class)
+    String nativeQuery = "select * from Teacher where name = :name";
+    List<Teacher> teachers = em.createNativeQuery(nativeQuery,Teacher.class)
         .setParameter("name","teacherA")
         .getResultList();
     assertThat(teachers.size()).isEqualTo(1);
@@ -402,6 +404,7 @@ void namedNativeQueryInJpa() {
 ```
 Spring Data Jpa에서는 더 간단하게 사용가능하다.      
 👍TIP : 꼭 동적변수에는 @Param 어노테이션을 붙여야 한다.   
+👍TIP2 : 변수명과 찾는 이름이 동일한 경우에는 생략 가능하다.      
 <br>
 
 😊TeacherRepository.java   
@@ -516,6 +519,8 @@ Spring Data Jpa는 다양한 <strong>리턴 타입</strong>을 제공한다. 상
 Page와 Slice 리턴을 알아보자. Page는 count 쿼리가 추가로 실행되고 Slice는 +1 조회로 다음페이지 존재 여부만 알 수 있다.   
 
 ### 4-1 Page
+Page와 Slice 둘 다 Pageable 인터페이스 구현 객체를 변수로 넘겨주어야 한다.   
+해당 객체는 PageRequest라는 구현체를 쓰는 것이 일반적인데 정렬까지 쉽게 구현 가능하다.
 😊TeacherRepository.java
 ```java
 Page<Teacher> findPageAllBy(Pageable pageable);
@@ -532,12 +537,13 @@ void findPageAllBy() {
     }
     teacherRepository.saveAllAndFlush(teachers); // 기본 메서드
     // 페이지는 0부터 시작이다. 3페이지이고 1페이지당 5개씩, 정렬하여 조회하였다.
-    Page<Teacher> teacherPage = teacherRepository.findPageAllBy(PageRequest.of(2, 5, Sort.by("age").ascending()));
+    PageRequest pr = PageRequest.of(2, 5, Sort.by("age").ascending());
+    Page<Teacher> teacherPage = teacherRepository.findPageAllBy(pr);
 
-    System.out.println("teacherPage = " + teacherPage.getTotalElements()); // 총 행 갯수
-    System.out.println("teacherPage.getTotalPages() = " + teacherPage.getTotalPages()); // 총 페이지 수
-    for (Teacher teacher : teacherPage.getContent()) { // List 출력이다.
-        System.out.println("teacher = " + teacher);
+    System.out.println("teacherPage = " + teacherPage.getTotalElements());
+    System.out.println("getTotalPages() = " + teacherPage.getTotalPages());
+    for (Teacher teacher : teacherPage.getContent()) {
+    System.out.println("teacher = " + teacher);
     }
 ```
 
@@ -582,7 +588,7 @@ teacher = Teacher(id=20, name=tea13, age=13, subject=null)
 teacher = Teacher(id=21, name=tea14, age=14, subject=null)
 
 ```
-
+### 4-2 Slice
 Slice는 기존 쿼리보다 +1 하여 다음 페이지 존재 여부만 체크한다. (count 없어 성능 유리)   
 
 😊TeacherRepository.java   
@@ -595,14 +601,18 @@ Slice<Teacher> findSliceAllBy(Pageable pageable);
 ```java
 @Test
 void sliceTest() {
+    // DB에 기본값 저장
     teacherRepository.deleteAll();
     List<Teacher> teachers = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
         teachers.add(new Teacher("tea"+i, i));
     }
     teacherRepository.saveAllAndFlush(teachers);
-    Slice<Teacher> teacherSlice = teacherRepository.findSliceAllBy(PageRequest.of(3, 4, Sort.by("age").ascending()));
-    Slice<TeacherDto> dtos = teacherSlice.map(t -> new TeacherDto(t.getName(),t.getAge(),""));
+
+    PageRequest pr = PageRequest.of(3, 4, Sort.by(ASC,"age"));
+    Slice<Teacher> teacherSlice = teacherRepository.findSliceAllBy(pr);
+    Slice<TeacherDto> dtos = 
+        teacherSlice.map(t -> new TeacherDto(t.getName(),t.getAge(),""));
     for (TeacherDto dto : dtos) {
         System.out.println("dto = " + dto);
     }
@@ -633,6 +643,167 @@ dto = TeacherDto(name=tea13, age=13, subjectName=)
 dto = TeacherDto(name=tea14, age=14, subjectName=)
 dto = TeacherDto(name=tea15, age=15, subjectName=)
 ```
+
+## 5. Modifying Queries (Bulk Query)
+JPA는 변경감지로 조회한 엔티티의 수정을 통해 UPDATE가 이루어진다.   
+하지만 모든 회원 나이 1살 증가라던가 연봉 10%상승같은 여러건의 업데이트를 실행해야 하는 경우에 여러건의 업데이트를 수행하는 벌크성 쿼리를 제공한다.   
+예제를 보며 확인해 보자.
+
+😊TeacherRepository.java
+```java
+@Modifying(clearAutomatically = true)
+@Query(value = "update Teacher as t set t.age = :age", nativeQuery = false)
+int updateBulkAge(@Param("age") int age);
+```
+clearAutomatically 속성은 해당 벌크성 쿼리 실행 후 em.clear() 을 해주는 것이다.   
+(캐쉬를 비워야 싱크가 맞는다.)
+
+😊Test.java
+```java
+@Test
+void bulkQuery() {
+    teacherRepository.updateBulkAge(10);
+    // n+1 문제 발생!!! 패치조인을 해야 한다.
+    List<Teacher> teachers2 = teacherRepository.findAll();
+    for (Teacher teacher : teachers2) {
+        System.out.println("teacher2 = " + teacher);
+    }
+}
+
+```
+🔑query
+```sql
+/* update
+        Teacher as t 
+    set
+        t.age = :age */ 
+update
+    teacher
+set
+    age=?
+```
+💻console
+```markdown
+••• 😂query
+teacher2 = Teacher(id=4, name=teacherA, age=10, subject=Subject(id=1, title=math))
+••• 😂query
+teacher2 = Teacher(id=5, name=teacherB, age=10, subject=Subject(id=2, title=english))
+••• 😂query
+teacher2 = Teacher(id=6, name=mathT, age=10, subject=Subject(id=1, title=math))
+```
+원하는 결과는 나왔지만 조회 후 출력할 때 n+1문제가 발생했다.   
+이 경우에는 페치조인을 해야 한다. Spring Data Jpa 에서는 EntityGraph로 페치조인을 쉽게 적용할 수 있다.   
+
+## 6. EntityGraph (fetch join)
+Jpa 2.1 버전 이후로 페치 조인을 위한 @EntityGraph 어노테이션과 @NamedEntityGraph을 지원한다.   
+기존에 있는 findAll 같은 함수나 @Query, naming 자동 생성 함수도 @EntityGraph과 페치조인할 속성만 정의하면 된다.   
+
+😊TeacherRepository.java
+```java
+@EntityGraph(attributePaths = {"subject"}) 
+List<Teacher> findFirstByAgeIsLessThan(int age);
+```
+EntityGraph 어노테이션을 선언하고 attributePaths로 페치 조인할 엔티티의 변수명을 지정한다.   
+(하나면 괄호 생략 가능)   
+
+😊Test.java   
+```java
+@Test
+void entityGraph(){
+    teacherRepository.findFirstByAgeIsLessThan(40);
+}
+```
+🔑query   
+```sql
+    /* select
+        generatedAlias0 
+    from
+        Teacher as generatedAlias0 
+    where
+        generatedAlias0.age<:param0 */ 
+    select
+           teacher0_.teacher_id as teacher_1_1_0_,
+           subject1_.subject_id as subject_1_0_1_,
+           teacher0_.age as age2_1_0_,
+           teacher0_.name as name3_1_0_,
+           teacher0_.subject_id as subject_4_1_0_,
+           subject1_.title as title2_0_1_
+   from
+           teacher teacher0_
+               left outer join
+           subject subject1_
+           on teacher0_.subject_id=subject1_.subject_id
+   where
+           teacher0_.age<? limit ?
+```
+💻console   
+```markdown
+••• 😂query
+teacher2 = Teacher(id=4, name=teacherA, age=10, subject=Subject(id=1, title=math))
+••• 😂query
+teacher2 = Teacher(id=5, name=teacherB, age=10, subject=Subject(id=2, title=english))
+••• 😂query
+teacher2 = Teacher(id=6, name=mathT, age=10, subject=Subject(id=1, title=math))
+```
+
+👍Tip : NamedEntityGraph는 Entity에 선언하고 @EntityGraph의 value에 이름을 입력하면 된다.
+😊Teacher.java
+```java
+@Entity
+@NamedEntityGraph(name = "Teacher.subject",
+    attributeNodes = @NamedAttributeNode("subject"))
+public class Teacher {
+    •••
+```
+
+😊TeacherRepository.java   
+```java
+@EntityGraph(value = "Teacher.subject")
+Optional<Teacher> findFirstBy();
+```
+
+
+😊Tip : 지연 여부 확인   
+```java
+// Hibernate 지연 여부 확인
+boolean initialized = Hibernate.isInitialized(teacher.getSubject());
+System.out.println("[Hibernate] subject is proxy? " + initialized);
+
+// JPA 표준방법으로 확인
+PersistenceUnitUtil util = em.getEntityManagerFactory().getPersistenceUnitUtil();
+boolean loaded = util.isLoaded(teacher.getSubject());
+System.out.println("[Hibernate] subject is proxy? " + initialized);
+```
+
+## 7. JPA Hint & Lock
+JPA Hint는 jpa가 구현체인 hibernate에 전달하는 힌트이다. 여러 속성을 구현체에 전달 할 수 있다.
+
+😊TeacherRepository.java
+```java
+@QueryHints(value = { @QueryHint(name = "org.hibernate.readOnly", value = "true")})
+Optional<Teacher> findHintById(Long id);
+```
+
+😊Test.java
+```java
+@Test
+    void findHintById() {
+        teacherRepository.save(new Teacher("test", 22));
+        em.flush();
+        em.clear();
+        
+        Optional<Teacher> hintTea = teacherRepository.findHintById(teacher.getId());
+        hintTea.get().setAge(33);
+        em.flush();
+        em.clear();
+        
+        Optional<Teacher> hintById = teacherRepository.findHintById(teacher.getId());
+        assertThat(hintById.get().getAge()).isEqualTo(22); // 안바뀜 
+    }
+```
+    
+ReadOnly 속성을 true로 주니 변경 감지가 동작하지 않아 update 쿼리가 실행되지 않았다. 
+
 
 # How does Spring Data JPA Repository work?
 Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
@@ -732,6 +903,7 @@ public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T
 
 # ERROR CODE   
 1. TransactionRequiredException : No EntityManager with actual transaction    
+
 💻console      
 ```markdown
 javax.persistence.TransactionRequiredException: 
