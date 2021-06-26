@@ -814,8 +814,68 @@ Optional<Teacher> findLockByName(String name);
 ## 8. Custom Repository
 Spring Data JPA Repository는 인터페이스만 정의하고 구현체는 스프링이 자동 생성한다.   
 만약 Spring Data JPA가 제공하는 인터페이스를 직접 구현하려면 구현해야 하는 기능이 너무 많다.   
-하지만 원하는 메서드만 직접 구현할 수 있게 해 놓았다.
+하지만 원하는 메서드만 직접 구현할 수 있게 해 놓았다.   
 
+😊CustomRepository.java
+```java
+public interface CustomRepository {
+    Teacher findCustomById(Long id);
+}
+```
+
+😊CustomRepositoryImpl.java
+```java
+@Repository
+@Transactional
+public class CustomRepositoryImpl implements CustomRepository {
+    @Autowired
+    EntityManager em;
+
+    @Override
+    public Teacher findCustomById(Long id) {
+        System.out.println("========================");
+        System.out.println("now CustomRepositoryImpl");
+        System.out.println("========================");
+        return em.createQuery("select t from Teacher as t where t.id = :id",Teacher.class)
+                .setParameter("id",id)
+                .getSingleResult();
+    }
+}
+```
+인터페이스를 만들고 구현체는 인터페이스 이름 뒤에 Impl을 붙여야 Spring Data Jpa가 인식한다.
+
+😊TeacherRepository.java
+```java
+public interface TeacherRepository extends JpaRepository<Teacher, Long>, CustomRepository {
+```
+
+기존 TeacherRepository에 다중 상속을 받으면 CustomRepository의 기능은 구현체인 CustomRepositoryImpl에 선언된 대로 진행된다.
+
+😊Test.java
+```java
+@Test
+void findCustomRepo() {
+    Teacher teacher = new Teacher("test", 22);
+    teacherRepository.save(teacher);
+    em.flush();
+    em.clear();
+    Teacher customById = teacherRepository.findCustomById(teacher.getId());
+    System.out.println("customById = " + customById);
+}
+```
+
+💻console
+```markdown
+========================
+now CustomRepositoryImpl
+======================== 
+
+    ••• Query
+
+customById = Teacher(id=7, name=test, age=22, subject=null)
+```
+
+해당 CustomRepositoryImpl Print가 출력 된 걸 알 수 있다.   
 
 # How does Spring Data JPA Repository work?
 Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
