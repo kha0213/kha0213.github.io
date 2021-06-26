@@ -802,7 +802,19 @@ Optional<Teacher> findHintById(Long id);
     }
 ```
     
-ReadOnly 속성을 true로 주니 변경 감지가 동작하지 않아 update 쿼리가 실행되지 않았다. 
+ReadOnly 속성을 true로 주니 변경 감지가 동작하지 않아 update 쿼리가 실행되지 않았다.   
+<br>
+DB Lock은 @Lock 어노테이션을 통해 쉽게 설정 할 수 있다.
+😊TeacherRepository.java
+```java
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+Optional<Teacher> findLockByName(String name);
+```
+
+## 8. Custom Repository
+Spring Data JPA Repository는 인터페이스만 정의하고 구현체는 스프링이 자동 생성한다.   
+만약 Spring Data JPA가 제공하는 인터페이스를 직접 구현하려면 구현해야 하는 기능이 너무 많다.   
+하지만 원하는 메서드만 직접 구현할 수 있게 해 놓았다.
 
 
 # How does Spring Data JPA Repository work?
