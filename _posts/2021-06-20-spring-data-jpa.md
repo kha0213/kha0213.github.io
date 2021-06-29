@@ -746,7 +746,7 @@ teacher2 = Teacher(id=5, name=teacherB, age=10, subject=Subject(id=2, title=engl
 teacher2 = Teacher(id=6, name=mathT, age=10, subject=Subject(id=1, title=math))
 ```
 
-👍Tip : NamedEntityGraph는 Entity에 선언하고 @EntityGraph의 value에 이름을 입력하면 된다.
+👍TIP : NamedEntityGraph는 Entity에 선언하고 @EntityGraph의 value에 이름을 입력하면 된다.
 😊Teacher.java
 ```java
 @Entity
@@ -763,7 +763,7 @@ Optional<Teacher> findFirstBy();
 ```
 
 
-😊Tip : 지연 여부 확인   
+😊TIP : 지연 여부 확인   
 ```java
 // Hibernate 지연 여부 확인
 boolean initialized = Hibernate.isInitialized(teacher.getSubject());
@@ -877,6 +877,213 @@ customById = Teacher(id=7, name=test, age=22, subject=null)
 
 해당 CustomRepositoryImpl Print가 출력 된 걸 알 수 있다.   
 
+## 8. JPA Entity Lifecycle Event
+JPA가 동작 할 때 엔티티의 라이프사이클동안 실행할 수 있는 이벤트가 있다.   
+Spring Data JPA에서는 주석을 활용하여 이벤트에 쉽게 접근하고 비즈니스 로직을 활용할 수 있다.   
+엔티티 자체에 대한 메서드에 주석을 추가하고 엔티티 리스너를 이용하면 된다.   
+
+<table>
+    <tr>
+        <th>Annotation</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>@PrePersist</td>
+        <td>persist 하기 전</td>
+    </tr>
+    <tr>
+        <td>@PostPersist</td>
+        <td>persist 한 뒤</td>
+    </tr>
+    <tr>
+        <td>@PreRemove</td>
+        <td>엔티티 삭제 전</td>
+    </tr>
+    <tr>
+        <td>@PostRemove</td>
+        <td>엔티티 삭제 뒤</td>
+    </tr>
+    <tr>
+        <td>@PreUpdate</td>
+        <td>엔티티 업데이트 전</td>
+    </tr>
+    <tr>
+        <td>@PostUpdate</td>
+        <td>엔티티 업데이트 후</td>
+    </tr>
+    <tr>
+        <td>@PostLoad</td>
+        <td>엔티티가 로드 된 후 (select 이후)</td>
+    </tr>
+</table>
+
+예를 들어 확인해보자.   
+
+😊Teacher.java
+```java
+@PrePersist
+void prePersist() {
+    log.info("😊 prePersist start!!!");
+}
+
+@PostPersist
+void postPersist() {
+    log.info("😊 postPersist start!!!");
+}
+
+@PreRemove
+void preRemove() {
+    log.info("😊 preRemove start!!!");
+}
+
+@PostRemove
+void postRemove() {
+    log.info("😊 postRemove start!!!");
+}
+
+@PreUpdate
+void preUpdate() {
+    log.info("😊 preUpdate start!!!");
+}
+
+@PostUpdate
+void postUpdate() {
+    log.info("😊 postUpdate start!!!");
+}
+
+@PostLoad
+void postLoad() {
+    log.info("😊 postLoad start!!!");
+}
+```
+
+😊Test.java
+```java
+@Test
+void lifecycleTest () {
+    System.out.println("😊 lifecycleTest start!!");
+    Teacher teacher = new Teacher("testT", 100);
+    teacherRepository.save(teacher);
+    em.flush();
+    em.clear();
+    Teacher findTeacher = teacherRepository.findById(teacher.getId()).get();
+    findTeacher.setName("testT2");
+    em.flush();
+    em.clear();
+    Teacher findTeacher2 = teacherRepository.findById(findTeacher.getId()).get();
+    teacherRepository.delete(findTeacher2);
+    em.flush();
+    em.clear();
+}
+```
+
+💻console
+```markdown
+😊 lifecycleTest start!!
+😊 prePersist start!!!
+😊 postPersist start!!!
+😊 postLoad start!!!
+😊 preUpdate start!!!
+😊 postUpdate start!!!
+😊 postLoad start!!!
+😊 preRemove start!!!
+😊 postRemove start!!!
+```
+
+해당 이벤트를 적용해서 엔티티에 생성시간, 수정시간, 생성자, 수정자를 각각 넣어 줄 수 있다.
+
+
+## 9. Auditing
+JPA에서는 각 이벤트에 특정한 행위를 할 수 있는 Audit을 제공한다.   
+보통 DB에 들어가는 생성시간, 생성자, 수정시간, 수정자 등 공통으로 데이터가 삽입, 변경될 때 원하는 옵션을 할 수 있다.   
+1. Entity에 @EntityListeners(AuditingEntityListener.class) 삽입한다.
+2. @EnableJpaAuditing을 스프링 부트 어노테이션과 같이 작성한다.
+3. AuditorAware를 리턴하는 Bean을 만든다 (생략시 Date만 작동가능)   
+예를 들어 보자.
+
+😊BaseEntity.java   
+```java
+@Getter @Setter
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
+public abstract class BaseEntity {
+    @CreatedDate
+    @Column(updatable = false)
+    protected LocalDateTime createDate;
+    @CreatedBy
+    @Column(updatable = false)
+    protected String createName;
+    @LastModifiedDate
+    protected LocalDateTime lastModifiedDate;
+    @LastModifiedBy
+    protected String lastModifiedName;
+}
+```
+생성자, 생성시간, 수정자, 수정시간은 운영에서 데이터 추적이 가능한 중요한 요소이므로 Spring Data Jpa에서는 어노테이션으로 쉽게 쓸 수 있게 제공한다.   
+다만 CreateBy와 LastModifiedBy는 AuditorAware 를 리턴하는 빈을 구현해야 한다.   
+
+😊Teacher.java
+```java
+@Entity
+public class Teacher extends BaseEntity {
+    •••
+}
+```
+상속받아 해당 기능을 쉽게 사용 가능하다.   
+
+😊DataJpaConfig.java
+```java
+@Configuration
+public class DataJpaConfig {
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return () -> Optional.of(UUID.randomUUID().toString());
+    }
+}
+```
+예제로 UUID를 받았지만 실무에서는 RequestContextHolder (스프링 전역에서 Request를 가져올 수 있다.)    
+등을 사용하여 세션에서 유저 아이디를 가져와 넣으면 된다.   
+
+😊SpringDataJpaApplication.java
+```java
+@EnableJpaAuditing
+@SpringBootApplication
+public class SpringDataJpaApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SpringDataJpaApplication.class, args);
+    }
+}
+```
+
+✨@EnableJpaAuditing를 사용해야만 Auditing기능이 작동한다.   
+
+👍TIP1 : @EntityListeners(AuditingEntityListener.class)를 생략하고 Spring Data Jpa가 제공하는 이벤트를 엔티티 전체에 적용하려면 orm.xml에 다음과 같이 등록하면 된다.   
+👍TIP2 : @EntityListeners(AuditingEntityListener.class) 안의 AuditingEntityListener 대신에 사용자가 직접 정의한 클래스를 넣을 수 있다.   
+해당 클래스는 Entity Lifecycle Event의 어노테이션 (ex @PrePersist) 등을 사용하여 기능을 정의할 수 있다.   
+
+😊META-INF/orm.xml
+```xml
+<?xml version=“1.0” encoding="UTF-8”?>
+<entity-mappings xmlns=“http://xmlns.jcp.org/xml/ns/persistence/orm”
+    xmlns:xsi=“http://www.w3.org/2001/XMLSchema-instance”
+    xsi:schemaLocation=“http://xmlns.jcp.org/xml/ns/persistence/
+    orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd”
+    version=“2.2">
+    <persistence-unit-metadata>
+        <persistence-unit-defaults>
+            <entity-listeners>
+            <entity-listener
+            class="org.springframework.data.jpa.domain.support.AuditingEntityListener”/>
+            </entity-listeners>
+        </persistence-unit-defaults>
+    </persistence-unit-metadata>
+</entity-mappings>
+```
+
+👍TIP3 : EntityListeners에서 @Autowired가 동작하지 않는 이유
+EntityListeners로 등록한 클래스는 Spring IOC 컨테이너의 관리 대상이 아니기 때문이다.
+ApplicationEvent를 상속받아 DI 전 우선 주입으로 해결할 수 있다.   
+[참고 : 김찬정블로그 ](https://kimchanjung.github.io/programming/2020/06/28/spring-jpa-antity-listner-autowired-not-working/)   
 # How does Spring Data JPA Repository work?
 Spring Data JPA는 JPA를 추상화하여 사용하기 간편하게 만든 것이다. 대부분의 경우 EntityManager를 직접 다루지 않는다. (물론 사용할 수도 있다.)   
 JPA를 추상화한 Repository와 여러 어노테이션을 기반한 기능으로 JPA를 보다 간단하게 사용가능하다.   
