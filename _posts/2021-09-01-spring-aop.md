@@ -7,11 +7,11 @@ toc_icon: "book"
 toc_sticky : true
 
 categories:
-- spring
-  tags:
-- aop
-- study
-  last_modified_at: 2021-09-01T00:40:00-00:00
+  - spring
+tags:
+  - aop
+  - study
+last_modified_at: 2021-09-01T00:40:00-00:00
 ---
 
 # What is AOP
@@ -35,7 +35,8 @@ AOP에 사용 되는 용어 정리이다.
    Aspect가 무엇을 언제 할 지를 정의한다.   
    **Note:**   
    Aspect는 다섯 종류의 Advice를 가진다.   
-   {: .notice--info}
+   {: .notice--info}   
+   
     * before : 대상이 호출되기 전에 Advice 기능을 수행한다.
     * after : 대상이 호출된 후에 Advice 기능을 수행한다.
     * after-returning : 대상이 성공적으로 호출된 후에 Advice 기능을 수행한다.
@@ -60,26 +61,6 @@ AOP에 사용 되는 용어 정리이다.
 
 # AOP Terminology
 
-
-
-Spring Data JPA를 사용하면 JPA 기반 Repository를 쉽게 구현할 수 있다.   
-인터페이스만 작성을 하면 Spring이 자동으로 구현을 해주기 때문에 반복적인 작업이 상당히 줄어든다.
-
-특징으로는 다음과 같다.
-1. Spring 및 JPA 기반 Repository를 위한 복잡한 기능을 지원한다.
-2. Querydsl을 통한 type-safe한 JPA 쿼리를 제공한다.
-3. DomainClassConverter를 통해 domain 클래스를 적절하게 변환해준다.
-4. 페이징 처리, 동적 쿼리 실행의 추상화로 간단히 쓸 수 있다.
-5. @Query주석이 달린 쿼리의 유효성 검사를 실행한다.
-6. XML기반 엔티티 매핑도 지원한다.
-7. @EnableJpaRepositories로 JavaConfig 기반 Repository를 구성한다. (SpringBoot에서는 어노테이션 없이 사용 가능하다.)
-
-# Getting Start Spring Data JPA
-## 1. 프로젝트 세팅
-### 1-1 Spring
-1. pom.xml에 spring-data-jpa와 h2 database의 의존성을 추가한다.
-2. xml 또는 java config 로 base-package를 지정한다.   
-   <br>
 
 😊root-context.xml
 ```xml
