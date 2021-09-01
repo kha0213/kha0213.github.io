@@ -1,5 +1,5 @@
 ---
-title:  "Spring AOP"
+title: "Spring AOP"
 
 toc: true
 toc_label: "go page"
