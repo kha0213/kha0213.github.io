@@ -2,8 +2,8 @@
 main:
   - title: "Home"
     url: /
-#  - title: "About"
-#    url: /my_portfolio/
+  - title: "About"
+    url: https://regular-seed-019.notion.site/af01843ad591476f86679ecf426adac2
   - title: "Category"
     url: /categories/
   - title: "Posts"
