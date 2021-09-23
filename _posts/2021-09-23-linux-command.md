@@ -116,9 +116,9 @@ last_modified_at: 2021-09-23T00:40:00-00:00
         <td>grep -i 'hello word' file1 file2</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>find</td>
+        <td>해당 이름을 가진 파일의 위치를 찾는다.</td>
+        <td>find /etc -name "*.conf"</td>
     </tr>
     <tr>
         <td></td>
