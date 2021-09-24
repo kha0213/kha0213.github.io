@@ -97,10 +97,12 @@ AOP에 사용 되는 개념 정리이다.
    로깅, 트랜잭션 관리와 같은 여러 곳에서 사용하는 작업 클래스이다. Aspect는 Spring XML에 정의된 클래스이거나 @Aspect 로 정의한 클래스 이다.
    
 2. Advice : 
-   Aspect가 무엇을 언제 할 지를 정의한다.   
+   Aspect가 무엇을 언제 할 지를 정의한다.    
+   
    **Note:**   
    Aspect는 다섯 종류의 Advice를 가진다.   
    {: .notice--info}   
+   
    
     * before : 대상이 호출되기 전에 Advice 기능을 수행한다.
     * after : 대상이 호출된 후에 Advice 기능을 수행한다.
