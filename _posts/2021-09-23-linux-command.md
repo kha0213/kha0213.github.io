@@ -6,6 +6,8 @@ toc_label: "go page"
 toc_icon: "book"
 toc_sticky : true
 
+classes: wide
+
 categories:
   - linux
 tags:
