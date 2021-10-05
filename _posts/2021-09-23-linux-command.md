@@ -154,6 +154,19 @@ EXPRESSION
 -a 나 -and로 둘 다 만족하는 조건을 찾고, -o, -or로 둘 중 하나 만족하는 조건을 찾을 수 있다. (default는 and이다.)
 {: .notice--info}
 
+## 4. apt
+apt는 리눅스 패키지 매니저이다.
+apt install	apt-get install	패키지 목록
+apt remove	apt-get remove	패키지 삭제
+apt purge	apt-get purge	패키지와 관련 설정 제거
+apt update	apt-get update	레파지토리 인덱스 갱신
+apt upgrade	apt-get upgrade	업그레이드 가능한 모든 패키지 업그레이드
+apt autoremove	apt-get autoremove	불필요한 패키지 제거
+apt full-upgrade	apt-get dist-upgrade	의존성 고려한 패키지 업그레이드
+apt search	apt-cache search	프로그램 검색
+apt show	apt-cache show	패키지 상세 정보 출력
+apt list apt 목록 출력
+
 # Linux all command
 리눅스에서는 명령어 하나에 여러 옵션들을 주어서 여러가지 기능들을 가능하게 한다.
 대략적인 명령어 소개와 자세한 쓰임새를 알아보자.
@@ -234,9 +247,9 @@ EXPRESSION
         <td>exit</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>sudo</td>
+        <td>해당 계정으로 실행한다. (default 관리자 계정)</td>
+        <td>sudo apt install hello</td>
     </tr>
     <tr>
         <td></td>

@@ -21,7 +21,13 @@ AOP (Aspect Oriented Programming) 란 관점지향 프로그래밍이다.
 
 그림에서 로그인 서비스, 판매 서비스, 다운로드 서비스는 애플리케이션의 핵심 기능이다.    
 해당 서비스를 이용 할 때 로그를 남기고 싶다고 모든 서비스에 로그를 달았다가는 나중에 로그를 변경해야 할 때 상당히 곤란한 상황에 처할 수 있다.   
-따라서 AOP는 로깅, 트랜잭션, 보안 등 꼭 필요하지만 핵심기능이 아닌 부가기능을 따로 관리하여 모듈화 할 수 있게 하는 것을 말한다.   
+따라서 AOP는 부가기능을 따로 관리하여 모듈화 할 수 있게 하는 것을 말한다.   
+
+👍TIP : 부가기능이란?   
+로깅, 트랜잭션, 보안 등 서비스에 꼭 필요하지만 핵심기능이 아닌 애플리케이션의 전 영역에서 나타날 수 있는 기능을 말한다.   
+(횡단관심사라고도 불리기도 한다.)   
+* 중복코드가 발생하기 쉽다.   
+* 핵심 비즈니스 로직과 함께 있으면 코드가 복잡해진다.   
 
 😊간단한 예를 들어서 알아보자.   
 ```java
@@ -42,13 +48,13 @@ public class MarketService {
 시간 확인을 원하는 메소드 마다 반복적으로 같은 코드가 작성될 수밖에 없다.   
 이러한 핵심 비즈니스가 아닌 시간을 재는 기능을 따로 모듈화 하여 관리할 때 AOP는 유용한 기능이다.   
 
-👍TIP : AOP는 프록시 패턴을 통해 구현 한다.
+👍TIP : Spring AOP는 프록시 패턴을 통해 구현 한다.
 
 # Quick Start AOP
-간단한 구현 방법 확인 후 개념을 이해해보자.
+간단한 구현 방법 확인 후 개념을 이해해보자.   
+아래는 Spring boot 일 때의 적용하는 방법이다.
 
 ## 1. 의존성 주입
-Spring boot 일 때의 방법이다.
 😊pom.xml
 ```xml
 <dependency>
@@ -103,7 +109,6 @@ AOP에 사용 되는 개념 정리이다.
    Aspect는 다섯 종류의 Advice를 가진다.   
    {: .notice--info}   
    
-   
     * before : 대상이 호출되기 전에 Advice 기능을 수행한다.
     * after : 대상이 호출된 후에 Advice 기능을 수행한다.
     * after-returning : 대상이 성공적으로 호출된 후에 Advice 기능을 수행한다.
@@ -124,5 +129,85 @@ AOP에 사용 되는 개념 정리이다.
 6. Weaving : 
     타깃 객체에 Aspect를 적용해서 새로운 프록시 객체를 생성하는 절차이다.   
 
+# Spring AOP
+각 언어마다 AOP가 있지만 Spring framework에서는 Spring AOP가 주로 사용된다.   
+Spring AOP는 순수 자바로 구현되어 특별한 컴파일 과정이 필요 없다. Spring Framework의 AOP 기능은 일반적으로 Spring IoC 컨테이너와 함께 사용된다.    
+따라서 Spring AOP는 Bean객체에만 적용이 가능하다.
+그래서 AspectJ에 비해 기능이 약하나 포괄적으로 사용이 가능하고 @AspectJ 어노테이션을 통해 AspectJ도 쉽게 사용 가능하다.    
+
+👍TIP : 우아한 Tech에 잘 정리되어 있어서 Spring AOP와 AspectJ의 차이를 확인해 보았다.
+[우아한Tech-Spring AOP](https://www.youtube.com/watch?v=Hm0w_9ngDpM)   
+<table>
+    <tr>
+        <th></th>
+        <th>Spring AOP</th>
+        <th>AspectJ</th>
+    </tr>
+    <tr>
+        <td>목표</td>
+        <td>간단한 AOP 기능 제공</td>
+        <td>완벽한 AOP 기능 제공</td>
+    </tr>
+    <tr>
+        <td>join point</td>
+        <td>메서드 레벨만 지원</td>
+        <td>생성자, 필드, 메서드, 객체 등 모두 지원</td>
+    </tr>
+    <tr>
+        <td>weaving</td>
+        <td>런타임 시에만 가능</td>
+        <td>compile-time, post-compile, load-time 제공</td>
+    </tr>
+    <tr>
+        <td>대상</td>
+        <td>Spring Container가 관리하는 Bean</td>
+        <td>모든 Java Object에 가능</td>
+    </tr>
+</table>
+
+# Using AOP In Spring
+Spring AOP에 대한 사용법을 자세히 알아보자.
+pointcut 표현식을 알아보자.
+pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링 할 수 있다.
 
 
+1. execution : 대표적으로 메서드를 실행시에 적용하겠다는 표시이다.   
+   .. : 0개 이상.   
+   (*) : 1개의 매개변수.   
+   ! : 부정어   
+   * : 모든 것을 뜻하는 일종의 와일드카드이다. (ex) User* 이면 User로 시작하는 모든 것이다.   
+
+![aop-execution.png]({{ site.baseurl }}/assets/images/study/aop/aop-execution.png)      
+
+위와 같은 공식을 사용하면 어떠한 패턴에도 적용가능하다. 예를 들어 확인해 보자.   
+
+😊example
+```java
+// 1. 매개변수 없고 리턴타입 String, public인 hello 메서드에 적용 가능하다. (여러 클래스에서도 해당 조건을 만족하면 hello()메서드가 전부 적용된다.)
+@Around("execution(public String hello())")
+
+// 2. 매개변수가 0개 이상인 hell로 시작하는 메서드)
+@Around("execution(* hell*(..))")
+
+// 3. aopController 안의 매개변수가 1개인 모든 메서드
+@Before("execution(* com.example.springmvc.restController.aopController.*(*))")
+
+// 4. com.example.springmvc 패키지의 모든 클래스의 적용 (서브패키지는 미포함)
+@After("execution(* com.example.springmvc.*.*(..))")
+
+// 4. com.example.springmvc 패키지의 모든 클래스의 적용 (서브패키지도 포함)
+@After("execution(* com.example.springmvc..*.*(..))")
+```
+
+
+2. within : 타입패턴 내에 해당하는 모든 것들을 포인트 컷 한다.
+
+3. bean : bean 이름으로 포인트 컷 한다.
+
+4. args : 
+
+
+
+## Reference
+[https://docs.spring.io/spring-framework/docs/2.5.x/reference/aop.html](https://docs.spring.io/spring-framework/docs/2.5.x/reference/aop.html)    
+[우아한Tech-Spring AOP](https://www.youtube.com/watch?v=Hm0w_9ngDpM)    
