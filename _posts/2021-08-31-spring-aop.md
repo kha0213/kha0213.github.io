@@ -177,8 +177,7 @@ pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링
    ! : 부정어   
    * : 모든 것을 뜻하는 일종의 와일드카드이다. (ex) User* 이면 User로 시작하는 모든 것이다.   
 
-![aop-execution.png]({{ site.baseurl }}/assets/images/study/aop/aop-execution.png)      
-
+![aop-execution]({{ site.baseurl }}/assets/images/study/aop/aop-execution.png)    
 위와 같은 공식을 사용하면 어떠한 패턴에도 적용가능하다. 예를 들어 확인해 보자.   
 
 😊example
@@ -201,10 +200,39 @@ pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링
 
 
 2. within : 타입패턴 내에 해당하는 모든 것들을 포인트 컷 한다.
+   within(com.edu.aop.SomeService)
+
+- com.edu.aop.SomeService 인터페이스의 모든 메서드
+
+
+
+within(com.edu.aop.*)
+
+- com.edu.aop 패키지의 모든 메서드
+
+
+
+within(com.edu.aop..*)
+
+- com.edu.aop 패키지 및 하위 패키지의 모든 메서드
 
 3. bean : bean 이름으로 포인트 컷 한다.
 
-4. args : 
+4. pointcut : @Pointcut로 미리 지정하면 여러곳에서 재활용 할 수 있다.
+```java
+// 포인트컷으로 패턴을 만들고 해당 메서드 명으로 다른 Advice에서 활용 가능하다.
+@Pointcut("execution(* hello(..))")
+public void helloPoint() {}
+
+// @Pointcut의 메서드 명만 적어주면 된다.
+@Around("helloPoint()")
+```
+   
+**Note:**      
+위에서 helloPoint메서드 안의 내용은 비워 두는 것이 원칙이며 (설령 로직 있어도 실행되지 않음) Pointcut 하기 위한 메서드 명만 의미가 있다.   
+(메서드 바디는 의미 없음)
+{: .notice--warn}   
+
 
 
 
