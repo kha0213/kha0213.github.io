@@ -87,21 +87,64 @@ OPTION
 -H        : 심볼릭 링크를 따라가지 않으나, Command Line Argument를 처리할 땐 예외.
 
 EXPRESSION   
-| name [PATTERN]            |   지정된 문자열 패턴에 해당하는 파일 검색.                                     |
-| empty                     |   빈 디렉토리 또는 크기가 0인 파일 검색.                                         |
-| delete                    |   검색된 파일 또는 디렉토리 삭제.                                              |
-| exec                      |   검색된 파일에 대해 지정된 명령 실행.                                           |
-| path [PATTERN]            |   지정된 문자열 패턴에 해당하는 경로에서 검색.                                      |
-| print                     |   검색 결과를 출력. 검색 항목은 newline으로 구분. (기본 값)                          |
-| print0                    |   검색 결과를 출력. 검색 항목은 null로 구분.                                     |
-| size [N]                  |   파일 크기를 사용하여 파일 검색.                                               |
-| type []                   |   지정된 파일 타입에 해당하는 파일 검색.                                          |
-| mindepth [LEVELS]         |   검색을 시작할 하위 디렉토리 최소 깊이 지정. (조건 중 가장 먼저 걸어야 한다.)          |
-| maxdepth [LEVELS]         |   검색할 하위 디렉토리의 최대 깊이 지정. (조건 중 가장 먼저 걸어야 한다.)             |
-| atime [N]                 |   파일 접근(access) 시각을 기준으로 파일 검색.                                   |
-| ctime [N]                 |   파일 내용 및 속성 변경(change) 시각을 기준으로 파일 검색.                         |
-| mtime [N]                 |   파일의 데이터 수정(modify) 시각을 기준으로 파일 검색.                              |
-
+<table>
+    <tr>
+        <td>name [PATTERN]</td>
+        <td>지정된 문자열 패턴에 해당하는 파일 검색.</td>
+    </tr>
+    <tr>
+        <td>empty</td>
+        <td>빈 디렉토리 또는 크기가 0인 파일 검색.</td>
+    </tr>
+    <tr>
+        <td>delete</td>
+        <td>검색된 파일 또는 디렉토리 삭제.</td>
+    </tr>
+    <tr>
+        <td>exec</td>
+        <td>검색된 파일에 대해 지정된 명령 실행.</td>
+    </tr>
+    <tr>
+        <td>path [PATTERN]</td>
+        <td>지정된 문자열 패턴에 해당하는 경로에서 검색. </td>
+    </tr>
+    <tr>
+        <td>print</td>
+        <td>검색 결과를 출력. 검색 항목은 newline으로 구분. (기본 값)</td>
+    </tr>
+    <tr>
+        <td>print0</td>
+        <td>검색 결과를 출력. 검색 항목은 null로 구분.</td>
+    </tr>
+    <tr>
+        <td>size [N]</td>
+        <td>파일 크기를 사용하여 파일 검색.</td>
+    </tr>    
+    <tr>
+        <td>type []</td>
+        <td>지정된 파일 타입에 해당하는 파일 검색.</td>
+    </tr>    
+    <tr>
+        <td>mindepth [LEVELS]</td>
+        <td>검색을 시작할 하위 디렉토리 최소 깊이 지정. (조건 중 가장 먼저 걸어야 한다.)</td>
+    </tr>
+    <tr>
+        <td>maxdepth [LEVELS]</td>
+        <td>검색할 하위 디렉토리의 최대 깊이 지정. (조건 중 가장 먼저 걸어야 한다.)</td>
+    </tr>
+    <tr>
+        <td>atime [N]</td>
+        <td>파일 접근(access) 시각을 기준으로 파일 검색.</td>
+    </tr>
+    <tr>
+        <td>ctime [N]</td>
+        <td>파일 내용 및 속성 변경(change) 시각을 기준으로 파일 검색.</td>
+    </tr>
+    <tr>
+        <td>mtime [N]</td>
+        <td>파일의 데이터 수정(modify) 시각을 기준으로 파일 검색.</td>
+    </tr>
+</table>
 
 ```markdown
 
@@ -161,34 +204,34 @@ EXPRESSION
         <td>find /etc -name "*.conf"</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>date</td>
+        <td>날짜 관련 출력</td>
+        <td>date +$D</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>echo</td>
+        <td>(메아리) 해당 내용을 출력한다.</td>
+        <td>echo $PWD</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>env</td>
+        <td>환경변수를 확인한다.</td>
+        <td>env</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>cal</td>
+        <td>달력을 확인한다.</td>
+        <td>cal -A4</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>history</td>
+        <td>명령어 기록을 출력한다.</td>
+        <td>history</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>exit</td>
+        <td>실행중인 쉘을 종료한다.</td>
+        <td>exit</td>
     </tr>
     <tr>
         <td></td>
