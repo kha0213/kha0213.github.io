@@ -99,34 +99,34 @@ public class LogAspect {
 AOP에 사용 되는 개념 정리이다.   
 ![Program_Execution]({{ site.baseurl }}/assets/images/study/aop/Program_Execution.webp)    
 
-1. Aspect : 
+* Aspect : 
    로깅, 트랜잭션 관리와 같은 여러 곳에서 사용하는 작업 클래스이다. Aspect는 Spring XML에 정의된 클래스이거나 @Aspect 로 정의한 클래스 이다.
-   
-2. Advice : 
+
+* Advice : 
    Aspect가 무엇을 언제 할 지를 정의한다.    
    
    **Note:**   
    Aspect는 다섯 종류의 Advice를 가진다.   
    {: .notice--info}   
    
-    * before : 대상이 호출되기 전에 Advice 기능을 수행한다.
-    * after : 대상이 호출된 후에 Advice 기능을 수행한다.
-    * after-returning : 대상이 성공적으로 호출된 후에 Advice 기능을 수행한다.
-    * after-throwing : 대상이 예외를 던진 후에 Advice 기능을 수행한다.
-    * around : Advice가 대상 작업을 감싸서 호출 전과 호출 후에 할 기능을 정의한다.   
-    
-3. Join Point : 
+    1. before : 대상이 호출되기 전에 Advice 기능을 수행한다.
+    2. after : 대상이 호출된 후에 Advice 기능을 수행한다.
+    3. after-returning : 대상이 성공적으로 호출된 후에 Advice 기능을 수행한다.
+    4. after-throwing : 대상이 예외를 던진 후에 Advice 기능을 수행한다.
+    5. around : Advice가 대상 작업을 감싸서 호출 전과 호출 후에 할 기능을 정의한다.   
+
+* Join Point : 
    Advice를 적용할 수 있는 곳을 Join Point 라고 한다.
    즉 애플리케이션 실행에 Aspect를 끼워 넣을 수 있는 지점을 말한다. 이러한 조인 포인트는 메소드 호출 지점이나 예외 발생, 필드 값 수정 등이 있다.    
-   
-4. PointCut : 
+
+* PointCut : 
    Aspect가 어디서 Join Point 할 지를 말한다.   
    간단하게 클래스나 메소드 명을 직접 사용해도 되고 정규표현식이나 다양한 연산자를 이용하여 동적으로 결정 할 수도 있다.   
-   
-5. Introduction :
+
+* Introduction :
    기존 클래스에 코드 변경 없이도 새 메소드나 새 멤버 변수를 추가하는 기능이다.   
-   
-6. Weaving : 
+
+* Weaving : 
     타깃 객체에 Aspect를 적용해서 새로운 프록시 객체를 생성하는 절차이다.   
 
 # Spring AOP
@@ -172,12 +172,13 @@ pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링
 
 
 1. execution : 대표적으로 메서드를 실행시에 적용하겠다는 표시이다.
-   <pre>
-   .. : 0개 이상.   
-   (*) : 1개의 매개변수.   
-   ! : 부정어   
-   * : 모든 것을 뜻하는 일종의 와일드카드이다. (ex) User* 이면 User로 시작하는 모든 것이다.
-   </pre>
+
+```markdown
+.. : 0개 이상.   
+(*) : 1개의 매개변수.   
+! : 부정어   
+* : 모든 것을 뜻하는 일종의 와일드카드이다. (ex) User* 이면 User로 시작하는 모든 것이다.
+```
 
 ![aop-execution]({{ site.baseurl }}/assets/images/study/aop/aop-execution.png)    
 위와 같은 공식을 사용하면 어떠한 패턴에도 적용가능하다. 예를 들어 확인해 보자.   
@@ -230,9 +231,9 @@ public void helloPoint() {}
 ```
    
 **Note:**      
-위에서 helloPoint메서드 안의 내용은 비워 두는 것이 원칙이며 (설령 로직 있어도 실행되지 않음) Pointcut 하기 위한 메서드 명만 의미가 있다.   
+위에서 helloPoint메서드 안의 내용은 비워 두는 것이 원칙이며 (설령 로직 있어도 실행되지 않음) Pointcut 하기 위한 메서드 명만 의미가 있다.
 (메서드 바디는 의미 없음)
-{: .notice--warn}   
+{: .notice--warn}
 
 
 

@@ -252,9 +252,9 @@ apt list apt 목록 출력
         <td>sudo apt install hello</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>apt</td>
+        <td>패키지 매니저 관련 정보가 나타난다. list, install ...</td>
+        <td>apt list | grep hello</td>
     </tr>
     <tr>
         <td></td>
