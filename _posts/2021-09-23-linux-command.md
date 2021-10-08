@@ -222,6 +222,11 @@ apt list apt 목록 출력
         <td>date +$D</td>
     </tr>
     <tr>
+        <td>file</td>
+        <td>해당 파일의 정보를 알 수 있다.</td>
+        <td>file filelist.gz</td>
+    </tr>
+    <tr>
         <td>echo</td>
         <td>(메아리) 해당 내용을 출력한다.</td>
         <td>echo $PWD</td>
@@ -297,8 +302,8 @@ apt list apt 목록 출력
         <td></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td> > </td>
+        <td>파일로 저장해라</td>
+        <td>find > filelist (find의 출력결과를 filelist라는 파일로 저장)</td>
     </tr>
 </table>
