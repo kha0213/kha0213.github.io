@@ -64,7 +64,8 @@ public class MarketService {
 ```
 
 ## 2. @EnableAspectJAutoProxy 적용
-최상위 패키지에 있는 Bean 클래스에 어노테이션을 작성해 준다.
+proxy를 적용하고자 하는 패키지에 있는 Bean 클래스에 어노테이션을 작성해 준다.    
+👍TIP: (@SpringBootApplication 안에 EnableAspectJAutoProxy가 있어서 명시 안 해주어도 된다. )
 ```java
 @EnableAspectJAutoProxy
 @SpringBootApplication
@@ -86,6 +87,7 @@ public class LogAspect {
     @Around("execution(* com.example.demo.service.MarketService.*(..))")
     public Object logging(ProceedingJoinPoint pjp) throws Throwable {
         log.info("start - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
+        // 실제 target의 메서드 실행
         Object result = pjp.proceed();
         log.info("finished - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
         return result;
@@ -97,7 +99,7 @@ public class LogAspect {
 
 # AOP Terminology
 AOP에 사용 되는 개념 정리이다.   
-![Program_Execution]({{ site.baseurl }}/assets/images/study/aop/Program_Execution.webp)    
+![Program_Execution]({{ site.baseurl }}/assets/images/study/aop/Program_Execution.webp)
 
 * Aspect : 
    로깅, 트랜잭션 관리와 같은 여러 곳에서 사용하는 작업 클래스이다. Aspect는 Spring XML에 정의된 클래스이거나 @Aspect 로 정의한 클래스 이다.
@@ -116,12 +118,12 @@ AOP에 사용 되는 개념 정리이다.
     5. around : Advice가 대상 작업을 감싸서 호출 전과 호출 후에 할 기능을 정의한다.   
 
 * Join Point : 
-   Advice를 적용할 수 있는 곳을 Join Point 라고 한다.
+   Advice를 적용할 수 있는 곳을 Join Point 라고 한다.   
    즉 애플리케이션 실행에 Aspect를 끼워 넣을 수 있는 지점을 말한다. 이러한 조인 포인트는 메소드 호출 지점이나 예외 발생, 필드 값 수정 등이 있다.    
-
+  (spring aop에서 주로 사용하는 것은 메소드 호출 지점이다.)   
 * PointCut : 
    Aspect가 어디서 Join Point 할 지를 말한다.   
-   간단하게 클래스나 메소드 명을 직접 사용해도 되고 정규표현식이나 다양한 연산자를 이용하여 동적으로 결정 할 수도 있다.   
+   간단하게 클래스나 메소드 명을 직접 사용해도 되고 정규표현식이나 다양한 연산자를 이용하여 동적으로 결정 할 수도 있다.      
 
 * Introduction :
    기존 클래스에 코드 변경 없이도 새 메소드나 새 멤버 변수를 추가하는 기능이다.   
@@ -129,10 +131,20 @@ AOP에 사용 되는 개념 정리이다.
 * Weaving : 
     타깃 객체에 Aspect를 적용해서 새로운 프록시 객체를 생성하는 절차이다.   
 
+😊간단한 예를 들어서 알아보자.   
+애플리케이션에서 com.yl.order 패키지에 있는 모든 메서드의 시작과 끝에 로그를 출력하는 aop를 만드려고 한다.   
+Aspect는 로그를 출력하는 작업을 의미하는 것이고, Advice는 around즉 대상 작업 호출 전과 호출 후를 의미하는 것이다.   
+PointCut은 com.yl.order 패키지 하위에 있는 모든 메서드 호출시 이다.
+(Join Point는 Advice가 적용 가능 한 모든 것을 의미하는 추상적인 개념이다.)   
+그리고 spring aop는 프록시를 통해 동작하므로 실제 동작은 Weaving을 통해서 하는 것을 알 수 있다.   
+
 # Spring AOP
 각 언어마다 AOP가 있지만 Spring framework에서는 Spring AOP가 주로 사용된다.   
-Spring AOP는 순수 자바로 구현되어 특별한 컴파일 과정이 필요 없다. Spring Framework의 AOP 기능은 일반적으로 Spring IoC 컨테이너와 함께 사용된다.    
-따라서 Spring AOP는 Bean객체에만 적용이 가능하다.
+Spring AOP는 순수 자바로 구현되어 특별한 컴파일 과정이 필요 없다.   (AspectJ는 컴파일 과정에 바이트 코드를 삽입하여 class파일을 변경한다.)   
+Spring Framework의 AOP 기능은 프록시 패턴으로 구현한다.   
+(프록시 패턴이라 final class이거나 static 메서드에는 Spring AOP를 사용하지 못한다.)   
+Spring IoC 컨테이너와 함께 사용된다.   
+따라서 Spring AOP는 Bean객체에만 적용이 가능하다.   
 그래서 AspectJ에 비해 기능이 약하나 포괄적으로 사용이 가능하고 @AspectJ 어노테이션을 통해 AspectJ도 쉽게 사용 가능하다.    
 
 👍TIP : 우아한 Tech에 잘 정리되어 있어서 Spring AOP와 AspectJ의 차이를 확인해 보았다.   
@@ -164,6 +176,7 @@ Spring AOP는 순수 자바로 구현되어 특별한 컴파일 과정이 필요
         <td>모든 Java Object에 가능</td>
     </tr>
 </table>
+
 
 # Using AOP In Spring
 Spring AOP에 대한 사용법을 자세히 알아보자.
