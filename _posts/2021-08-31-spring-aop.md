@@ -178,10 +178,10 @@ Spring IoC 컨테이너와 함께 사용된다.
 </table>
 
 
-# Using AOP In Spring
-Spring AOP에 대한 사용법을 자세히 알아보자.
-pointcut 표현식을 알아보자.
-pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링 할 수 있다.
+# Pointcut
+Pointcut 표현식에 대해 알아보자.
+Spring AOP는 AspectJ 표현식과 문법이 같다. (문법만 차용해서 쓰는 것일 뿐 소스는 다르다.)
+pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 쉽게 필터링 할 수 있다.
 
 
 1. execution : 대표적으로 메서드를 실행시에 적용하겠다는 표시이다.
@@ -239,12 +239,12 @@ pointcut을 사용하면 Advice가 적용될 비즈니스 메서드를 필터링
 @Pointcut("execution(* hello(..))")
 public void helloPoint() {}
 
-// @Pointcut의 메서드 명만 적어주면 된다.
+// @Pointcut의 메서드 명만 적어주면 된다. (다른 클래스에 있으면 경로도 필수)
 @Around("helloPoint()")
 ```
    
 **Note:**      
-위에서 helloPoint메서드 안의 내용은 비워 두는 것이 원칙이며 (설령 로직 있어도 실행되지 않음) Pointcut 하기 위한 메서드 명만 의미가 있다.
+@Pointcut으로 사용하는 helloPoint 메서드 안의 내용은 비워 두는 것이 원칙이며 (설령 로직 있어도 실행되지 않음) Pointcut 하기 위한 메서드 명만 의미가 있다.
 (메서드 바디는 의미 없음)
 {: .notice--warn}
 
