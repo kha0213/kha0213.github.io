@@ -22,7 +22,7 @@ sidebar-study:
         url: /java/java-time/
       - title: "Java Enum"
         url: /java/java-enum/
-      - title: "JAVA Functional Interface"
+      - title: "Java Functional Interface"
         url: /java/java-functional-interface/
   - title: "Spring"
     children:
