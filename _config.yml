@@ -294,7 +294,11 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      show_date: true
+      comments: true
+      share: true
+      related: true
+      search : true
   # _portfolio
   - scope:
       path: ""

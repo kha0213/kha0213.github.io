@@ -5,7 +5,7 @@ toc: true
 toc_label: "go page"
 toc_icon: "book"
 toc_sticky : true
-author_profile: false
+
 sidebar:
   nav: "sidebar-study"
 categories:
