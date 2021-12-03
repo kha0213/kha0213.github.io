@@ -5,7 +5,9 @@ toc: true
 toc_label: "go page"
 toc_icon: "book"
 toc_sticky : true
-
+sidebar:
+  title: "Study"
+  nav: sidebar-study
 categories:
   - spring
 tags:

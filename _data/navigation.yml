@@ -14,3 +14,31 @@ main:
 #    url: /portfolio/
 #  - title: "Docs"
 #    url: /docs/
+
+sidebar-study:
+  - title: "Java"
+    children:
+      - title: "Java 8 time package"
+        url: /java/java-time/
+      - title: "Java Enum"
+        url: /java/java-enum/
+      - title: "JAVA Functional Interface"
+        url: /java/java-functional-interface/
+  - title: "Spring"
+    children:
+      - title: "Spring AOP"
+        url: /spring/spring-aop/
+      - title: "Spring Data JPA"
+        url: /jpa/spring-data-jpa/
+  - title: "JPA"
+    children:
+      - title: "What is JPA"
+        url: /jpa/jpa-quick-start/
+      - title: "JPQL"
+        url: /jpa/jpa-jpql/
+      - title: "JPA & Hibernate Proxy"
+        url: /jpa/jpa-proxy/         
+      - title: "Spring Data JPA"
+        url: /jpa/spring-data-jpa/
+      - title: "Querydsl"
+        url: /jpa/querydsl/
