@@ -146,10 +146,6 @@ EXPRESSION
     </tr>
 </table>
 
-```markdown
-
-```
-
 표현식에는 연산자를 사용하여 두 개 이상의 표현식 조합이 가능하다.   
 -a 나 -and로 둘 다 만족하는 조건을 찾고, -o, -or로 둘 중 하나 만족하는 조건을 찾을 수 있다. (default는 and이다.)
 {: .notice--info}
@@ -166,6 +162,133 @@ apt full-upgrade	apt-get dist-upgrade	의존성 고려한 패키지 업그레이
 apt search	apt-cache search	프로그램 검색
 apt show	apt-cache show	패키지 상세 정보 출력
 apt list apt 목록 출력
+
+## 5. ps
+ps는 프로세스 관련 명령어이다.
+ps [option] 으로 관련 명령을 볼 수 있고 가장 많이 사용하는 명령어는 ps -ef 이다.
+<table>
+    <tr>
+        <th>옵션</th>
+        <th>설명</th>
+    </tr>
+    <tr>
+        <td>-A</td>
+        <td>모든 프로세스를 출력한다.</td>
+    </tr>
+    <tr>
+        <td>-a</td>
+        <td>세션 리더를 제외하고 데몬 프로세서처럼 터미널에 종속되지 않은 모든 프로세스를 출력한다.</td>
+    </tr>
+    <tr>
+        <td>**-e**</td>
+        <td>커널 프로세스를 제외한 모든 프로세스를 출력해준다.</td>
+    </tr>
+    <tr>
+        <td>**-f**</td>
+        <td>풀 포맷으로 보여준다.</td>
+    </tr>
+    <tr>
+        <td>-l</td>
+        <td>긴 포맷으로 보여준다.</td>
+    </tr>
+    <tr>
+        <td>-o [type]</td>
+        <td>**(pid, tty, time, cmd)** 등을 타입으로 입력하여 해당 것에 대한 조회를 할 수 있다.</td>
+    </tr>
+    <tr>
+        <td>-m</td>
+        <td>프로세스들 뿐만 아니라 커널 스레드들도 보여준다.</td>
+    </tr>
+    <tr>
+        <td>u</td>
+        <td>프로세스의 소유자를 기준으로 출력한다.</td>
+    </tr>
+    <tr>
+        <td>-u</td>
+        <td>특정 프로세스 정보를 확일할 때 사용한다. (기본은 현재 사용자)</td>
+    </tr>
+    <tr>
+        <td>-x</td>
+        <td>로그인 상태에 있는 동안 아직 완료되지 않은 프로세서들을 보여준다.</td>
+    </tr> 
+</table>
+
+일반적으로 ef옵션을 가장 많이 사용한다. (모든 프로세서를 풀 옵션으로 보기)
+
+![ps]({{ site.baseurl }}/assets/images/study/linux/linux-ps.png)   
+
+이제 출력되는 결과의 뜻을 확인해보자.
+
+<table>
+    <tr>
+        <th>항목</th>
+        <th>의미</th>
+    </tr>
+    <tr>
+        <td>UID (or USER)</td>
+        <td>프로세스 소유자의 이름</td>
+    </tr>
+    <tr>
+        <td>PID</td>
+        <td>프로세스 식별 번호</td>
+    </tr>
+    <tr>
+        <td>PPID</td>
+        <td>부모 프로세스ID</td>
+    </tr>
+    <tr>
+        <td>%CPU</td>
+        <td>CPU 사용 비율의 추정치 (BSD계열)</td>
+    </tr>
+    <tr>
+        <td>%MEM</td>
+        <td>메모리의 사용 비율의 추정치 (BSD계열)</td>
+    </tr>
+    <tr>
+        <td>VSZ</td>
+        <td>K단위 또는 페이지 단위의 가상메모리 사용량</td>
+    </tr>
+    <tr>
+        <td>RSS</td>
+        <td>실제 메모리 사용량</td>
+    </tr>
+    <tr>
+        <td>TTY</td>
+        <td>프로세서와 연결된 터미널</td>
+    </tr>
+    <tr>
+        <td>S (or STAT)</td>
+        <td>현재 프로세스 상태코드</td>
+    </tr>
+    <tr>
+        <td>TIME</td>
+        <td>총 CPU 사용 시간</td>
+    </tr>
+    <tr>
+        <td>COMMAND</td>
+        <td>프로세스의 실행 명령행</td>
+    </tr>
+    <tr>
+        <td>STIME</td>
+        <td>프로세스가 시작된 시간</td>
+    </tr>
+    <tr>
+        <td>C (or CP)</td>
+        <td>짧은 기간 동안의 CPU 사용률</td>
+    </tr>
+    <tr>
+        <td>F</td>
+        <td>프로세스의 플래그</td>
+    </tr>
+    <tr>
+        <td>PRI</td>
+        <td>실제 실행 우선순위</td>
+    </tr>
+    <tr>
+        <td>NI</td>
+        <td>nice 우선순위 번호</td>
+    </tr>
+</table>
 
 # Linux all command
 리눅스에서는 명령어 하나에 여러 옵션들을 주어서 여러가지 기능들을 가능하게 한다.
