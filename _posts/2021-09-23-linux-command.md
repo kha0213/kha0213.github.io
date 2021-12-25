@@ -180,11 +180,11 @@ ps [option] 으로 관련 명령을 볼 수 있고 가장 많이 사용하는 �
         <td>세션 리더를 제외하고 데몬 프로세서처럼 터미널에 종속되지 않은 모든 프로세스를 출력한다.</td>
     </tr>
     <tr>
-        <td>**-e**</td>
+        <td> **-e** </td>
         <td>커널 프로세스를 제외한 모든 프로세스를 출력해준다.</td>
     </tr>
     <tr>
-        <td>**-f**</td>
+        <td> **-f** </td>
         <td>풀 포맷으로 보여준다.</td>
     </tr>
     <tr>
@@ -193,7 +193,7 @@ ps [option] 으로 관련 명령을 볼 수 있고 가장 많이 사용하는 �
     </tr>
     <tr>
         <td>-o [type]</td>
-        <td>**(pid, tty, time, cmd)** 등을 타입으로 입력하여 해당 것에 대한 조회를 할 수 있다.</td>
+        <td> **(pid, tty, time, cmd)** 등을 타입으로 입력하여 해당 것에 대한 조회를 할 수 있다.</td>
     </tr>
     <tr>
         <td>-m</td>
@@ -289,6 +289,32 @@ ps [option] 으로 관련 명령을 볼 수 있고 가장 많이 사용하는 �
         <td>nice 우선순위 번호</td>
     </tr>
 </table>
+
+## 6. echo
+echo 명령어는 텍스트를 출력스트림으로 보여준다.
+
+echo $! : 마지막으로 백그라운드에서 실행된 명령어의 PID 값을 출력한다.
+echo $? : 마지막으로 종료된 명령어의 종료 상태를 말해준다. (정상 종료인 경우 0)
+echo $$ : 현재 쉘의 PID값을 출력한다.
+
+## 7. kill
+kill 명령어는 프로세스에 시그널을 보내주는 명령어 이다.
+강제종료를 위해 SIGKILL 시그널을 보내면 프로그램이 무조건 즉시 종료하게 되지만 이는 좋지 않은 방법이다.   
+SIGTERM이나 SIGINT 등의 종료 시그널은 시그널 핸들러를 등록하여 Socket close나 file close 같은 종료 작업을 한 뒤에 종료처리 하여야 하는데 
+SIGKILL은 핸들러를 두지 못해 즉시 종료하므로 저장중인 데이터가 유실될 우려가 있다.
+
+<pre>
+    kill [options] <pid> [...]
+</pre>
+
+kill 뒤에 시그널을 보내 명령을 내릴 수 있다. 
+주로 쓰이는 명령어는
+kill <pid> : SIGTERM (종료) 한다. default 가 15번 이다.
+kill -9 <pid> : 강제종료한다. (보통 SIGTERM 명령 먼저 보내보고 안될시 SIGKILL이 안전하다.)   
+kill -l : 시그널 리스트를 확인한다.
+
+
+![kill]({{ site.baseurl }}/assets/images/study/linux/kill.png)
 
 # Linux all command
 리눅스에서는 명령어 하나에 여러 옵션들을 주어서 여러가지 기능들을 가능하게 한다.
