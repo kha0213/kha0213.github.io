@@ -75,7 +75,7 @@ last_modified_at: 2021-09-23T00:40:00-00:00
 ### 2-3 head
 파일의 앞 부분 출력하는 명령어이다.
 <pre>
-head [<option>]... [<file>]...
+head [option]... [file]...
 </pre>
 
 * 자주 사용되는 옵션
@@ -87,7 +87,7 @@ ex) head -n 100 test.txt
 ### 2-4 tail
 head가 앞 부분이라면 tail은 파일의 뒷 부분을 출력해준다.
 <pre>
-tail [<option>]... [<file>]...
+tail [option]... [file]...
 </pre>
 * 자주 사용되는 옵션
 -f : 파일에 추가되는 내용 실시간 반영 출력 (로그 볼 때 중요)
