@@ -68,6 +68,55 @@ last_modified_at: 2021-09-23T00:40:00-00:00
 ## 2. ls, cat, head, tail
 파일 목록/내용 조회 명령어이다.
 
+### 2-1 ls
+
+### 2-2 cat
+
+### 2-3 head
+파일의 앞 부분 출력하는 명령어이다.
+<pre>
+head [<option>]... [<file>]...
+</pre>
+
+* 자주 사용되는 옵션
+-c, --bytes=[-]NUM : NUM byte만 출력
+-n, --lines=[-]NUM : NUM line만 출력 (default 10라인)
+    (-n에 -를 주게 되면 밑에 해당 NUM을 제외한 전체 출력 ex) head -n -20 :밑의 20라인 제외 후 처음부터 출력)
+ex) head -n 100 test.txt
+
+### 2-4 tail
+head가 앞 부분이라면 tail은 파일의 뒷 부분을 출력해준다.
+<pre>
+tail [<option>]... [<file>]...
+</pre>
+* 자주 사용되는 옵션
+-f : 파일에 추가되는 내용 실시간 반영 출력 (로그 볼 때 중요)
+-F : -f와 같은 기능에 추가로 파일이 삭제 후 재생성 되어도 따라간다. (로그같이 자동으로 이름 바뀌고 새로 만들어질 때 유용) (--follow=name --retry와 같다.)
+-c, --bytes=[-]NUM : NUM byte만 출력
+-n, --lines=[-]NUM : NUM line만 출력 (default 10라인)
+    (-n에 +로 주게 되면 해당 라인부터 끝까지 출력한다. ex) tail -n +10 :10번째 라인부터 끝까지 출력)
+
+### 2-5 wc (word count)
+파일의 line, word, byte count 출력하는 명령어이다. 
+<pre>
+wc [option]... [file]...
+</pre>
+* 자주 사용되는 옵션
+-l : 라인수 만 출력
+
+😊TIP : wc 뒤에 여러 파일을 입력하면 각각 파일 정보와 전체 정보까지 나온다.
+
+### nl (line number)
+파일 내용을 라인 넘버와 함께 출력
+<pre>
+nl [option]... [file]...
+</pre>
+
+* 자주 사용되는 옵션
+-ba : 모든 라인에 대해 라인 넘버링 (default는 빈 라인은 건너뛰기 하고 넘버링 됨)
+-v N : 시작 라인 넘버를 N으로 지정
+-s : 라인 넘버 출력 후 출력할 separator 지정
+
 ## 3. find, grep
 파일 탐색에 관련된 명령어이다. find는 주로 파일이나 디렉토리의 위치를 찾을 때 쓰고
 grep는 해당 파일 안의 내용을 찾을 때 쓴다.
