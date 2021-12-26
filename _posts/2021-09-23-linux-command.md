@@ -117,6 +117,39 @@ nl [option]... [file]...
 -v N : 시작 라인 넘버를 N으로 지정
 -s : 라인 넘버 출력 후 출력할 separator 지정
 
+### sort
+정렬하여 출력한다.
+<pre>
+sort [option]... [file]...
+</pre>
+* 자주 사용되는 옵션
+위치 기준
+-k : key에 의한 정렬 수행 
+    F[.C][OPTS]
+-t : 필드 구분자(기본값은 공백 문자)
+ex) sort -t: -k 3 (:를 구분자로 3번째 구분을 기준으로 sort한다.)
+
+정렬 기준
+-f, --ignore-case : 대소문자 무시하고 출력
+-g, --general-numeric-sort : 
+-n, --numeric-sort : 숫자를 기준으로 정렬 (ex 12와 2 이면 12가 뒤에)
+-r, --reverse : 역순 출력
+-u, --unique : (내용이 같은 경우 하나만 출력)
+
+😊Tip : 마지막에 --debug를 붙이면 sort 기준을 확인 할 수 있다.
+
+### uniq
+중복된 내용을 제거하고 출력
+
+<pre>
+uniq [option]... [&lt;input&gt; [&lt;출력&gt;]]
+</pre>
+
+* 자주 사용되는 옵션
+-d, --repeated : 중복된 내용만 출력
+-u, --unique : 중복되지 않은 내용만 출력
+-i, --ignore-case : 대소문자 
+
 ## 3. find, grep
 파일 탐색에 관련된 명령어이다. find는 주로 파일이나 디렉토리의 위치를 찾을 때 쓰고
 grep는 해당 파일 안의 내용을 찾을 때 쓴다.
