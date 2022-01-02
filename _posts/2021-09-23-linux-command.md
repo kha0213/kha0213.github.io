@@ -242,6 +242,7 @@ awk options 'selection _criteria {action }' input-file
   - RS : record separator(default 'new line')
   - OFS : Output field separator
   - ORS : Output record separator
+
 ## 3. 검색
 
 ### find
@@ -253,13 +254,12 @@ find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]
 find 명령어의 기본 사용법은
 find [경로] [옵션] [조건] [실행] 이다.
 
-
 OPTION
 -P        : 심볼릭 링크를 따라가지 않고, 심볼릭 링크 자체 정보 사용.
 -L        : 심볼릭 링크에 연결된 파일 정보 사용.
 -H        : 심볼릭 링크를 따라가지 않으나, Command Line Argument를 처리할 땐 예외.
 
-EXPRESSION
+
 <table>
     <tr>
         <td>name [PATTERN]</td>
@@ -275,7 +275,7 @@ EXPRESSION
     </tr>
     <tr>
         <td>exec</td>
-        <td>검색된 파일에 대해 지정된 명령 실행.</td>
+        <td>검색된 파일에 대해 지정된 명령 실행. 실행 위치에 {} 표시를 해 주고 마지막에 \; 으로 끝나야 한다.</td>
     </tr>
     <tr>
         <td>path [PATTERN]</td>
