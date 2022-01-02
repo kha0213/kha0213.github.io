@@ -6,8 +6,6 @@ toc_label: "go page"
 toc_icon: "book"
 toc_sticky : true
 
-classes: wide
-
 categories:
   - linux
 tags:
@@ -64,19 +62,19 @@ last_modified_at: 2021-09-23T00:40:00-00:00
 
 
 ## 1. 기본 명령어
-#### man (--help)
-#### ls (ll)
-#### cd
-#### cat
-#### touch
-#### echo
+### man (--help)
+### ls (ll)
+### cd
+### cat
+### touch
+### echo
 echo 명령어는 텍스트를 출력스트림으로 보여준다.
 
 echo $! : 마지막으로 백그라운드에서 실행된 명령어의 PID 값을 출력한다.
 echo $? : 마지막으로 종료된 명령어의 종료 상태를 말해준다. (정상 종료인 경우 0)
 echo $$ : 현재 쉘의 PID값을 출력한다.
 
-#### alias
+### alias
 
 ## 2. 텍스트 처리
 
