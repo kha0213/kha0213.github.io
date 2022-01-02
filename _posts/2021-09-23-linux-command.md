@@ -158,11 +158,92 @@ uniq [option]... [&lt;input&gt; [&lt;출력&gt;]]
   -u, --unique : 중복되지 않은 내용만 출력
   -i, --ignore-case : 대소문자
 
-### cut
-### tr
-### sed
-### awk
+기본적으로는 바로 다음 라인의 같은 문자열만 생략하고 출력하기 때문에 sort 명령어와 주로 같이 사용된다.
 
+ex) sort test.txt | uniq | nl 하면 test.txt파일에서 정렬하고 중복을 제거하고 순서를 붙여서 출력해준다.
+
+### cut
+각 파일에서 선택한 라인 부분을 출력한다.
+
+<pre>
+cut [option]... [file]...
+</pre>
+
+* 자주 사용되는 옵션
+  -b, --bytes=LIST : byte 선택
+  -c, --characters=LIST : character 선택
+  -f, --fields=LIST : 필드(컬럼) 선택
+  -d,  --delemiter=DELIM : tab 대신 사용할 구분자 지정
+  --complement : 선택 반전
+  --output-delimiter=STRING : 출력시 사용할 구분자 지정
+
+ex) 
+head /etc/passwd | cut -d ':' -f 1,7  
+head /etc/passwd | cut -d ':' -f 1,7 --output-delimiter=STRING ': '
+ls -al | cut -b -10
+ls -al | cut -b -10 --complement
+### tr
+어떤 내용을 변환(translate) 한다.
+<pre>
+tr [option]... SET2 [SET2]
+</pre>
+
+* 자주 사용되는 옵션
+  -c, -C, --complement
+  -d, --delete 해당 내용을 지우고 나머지를 출력한다.
+* SET
+    - CHAR1-CHAR2 : CHAR1부터 CHAR2까지(ex 'a-z')
+    - [:alnum:] : 문자 + 숫자
+    - [:alpha:] : 문자
+    - [:blank:] : 공백
+    - [:space:] : 공백 + newline
+    - [:digit:] / [:xdigit:] : 10진수 숫자 / 16진수 숫자
+    - [:lower:] / [:upper:] : 소문자 / 대문자
+
+어떤 내용을 지우거나 변환할 때 주로 사용한다.
+ex) 
+ll | tr -d '/' : /없애고 출력한다.
+ll | tr [:lower:] [:upper:] : 소문자를 모두 대문자로 변환시킨다.
+
+
+### sed
+stream editor 이다.
+단어의 변환, 출력, 삭제 등에 사용된다.
+<pre>
+sed [option]... {script-only-if-no-other-script} [input-file]
+</pre>
+
+* 자주 사용되는 옵션
+  - n : 기본 출력을 없애준다.
+  - {RANGE}p : range 내의 라인을 출력 (-n을 앞에 붙이면 해당 라인 출력)
+  - {RANGE}d : range 내의 라인을 삭제
+  - /SEARCHPATTERN/p : SEARCHPATTERN과 매치되는 라인을 출력
+  - /SEARCHPATTERN/d : SEARCHPATTERN과 매치되는 라인을 삭제
+  - s/REGEX/REPLACE/ : REGEX에 매치되는 처음 단어를 REPLACE로 교체
+  - s/REGEX/REPLACE/g : REGEX에 매치되는 모든 단어를 REPLACE로 교체
+  
+  ex)
+  ll | sed -n '2,5p' : 2번째 줄부터 5번째 줄까지 출력해라. (n을 빠뜨리면 2,5줄만 2번 출력한다.)
+  ll | sed '2,5d' : 2번째 줄부터 5번째 줄까지 삭제 후 출력해라.
+  ll | sed -n '/unins/p' : unins를 포함하는 행을 출력해라.
+  ll | sed 's/unins/xxxx/' : 맨 처음 unins를 xxxx로 바꾸어서 출력해라
+  ll | sed 's/unins/xxxx/g' : 모든 unins를 xxxx로 바꾸어서 출력해라
+### awk
+텍스트 처리 script language 이다.
+<pre>
+awk options 'selection _criteria {action }' input-file
+</pre>
+
+* 자주 사용되는 옵션
+  -F : field seperator 지정
+* 주요 내장 변수
+  - $1,  $2,  $3, ... :Nth field
+  - NR : number of records
+  - NF : number of fields
+  - FS : field separator(default 'white space')  
+  - RS : record separator(default 'new line')
+  - OFS : Output field separator
+  - ORS : Output record separator
 ## 3. 검색
 
 ### find
