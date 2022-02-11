@@ -65,6 +65,12 @@ last_modified_at: 2021-09-23T00:40:00-00:00
 
 ## 1. 기본 명령어
 ### man (--help)
+man과 --help는 명령어에 대한 설명과 예제가 나와있다. 보통 명령어의 옵션을 찾아보거나 내용을 찾아볼 때 주로 쓰인다.
+<pre>
+man [man options] [[section] page ...] ...
+</pre>
+
+
 ### ls (ll)
 ### cd
 ### cat
