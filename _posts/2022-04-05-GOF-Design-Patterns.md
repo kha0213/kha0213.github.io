@@ -311,8 +311,91 @@ public class Main {
 * 빌더 패턴의 단점
   1. 코드량 증가 및 클래스 증가
 
-😊 결론 : 생성자로 의미가 전달이 불분명하거나 불완전한 객체가 사용될 우려가 있는 곳에 빌더 패턴을 적용하자.
+😊 How to Use : 생성자로 의미가 전달이 불분명하거나 불완전한 객체가 사용될 우려가 있는 곳에 빌더 패턴을 적용하자.
 
+## Prototype Patterns (프로토 타입 패턴)
+프로토타입 패턴은 생성할 객체들의 타입이 프로토타입인 인스턴스로부터 결정되도록 하며, 
+인스턴스는 새 객체를 만들기 위해 자신을 복제(clone)하게 된다.
+
+😊GithubRepository.java
+```java
+@Data
+public class GithubRepository {
+
+    private String user;
+
+    private String name;
+}
+```
+
+😊GithubIssue.java  
+```java
+@Data
+@EqualsAndHashCode
+public class GithubIssue implements Cloneable {
+
+    private int id;
+
+    private String title;
+
+    private GithubRepository repository;
+
+    public GithubIssue(GithubRepository repository) {
+        this.repository = repository;
+    }
+
+    public String getUrl() {
+        return String.format("https://github.com/%s/%s/issues/%d",
+                repository.getUser(),
+                repository.getName(),
+                this.getId());
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+여기서 GithubIssue 객체가 프로토타입으로 clone을 사용하게 되면 얕은 복사 Shallow Copy 하게 된다.    
+GithubIssue 인스턴스는 다른 인스턴스가 생성되고 id, title 등 value 타입은 새로 생성되나 reference 타입은 주소값이 같은 주소값을 가르키기 때문에 오류가 생길 수 있다. 따라서 내부 값들을 불변 객체로 채우거나 깊은 복사로 copy 메서드를 오버라이드 해야한다.
+     
+다음은 실제로 Java에서 사용되는 프로토타입 패턴의 예를 알아보자. 
+😊 ArrayList.java
+```java
+public ArrayList(Collection<? extends E> c) {
+    Object[] a = c.toArray();
+    if ((size = a.length) != 0) {
+        if (c.getClass() == ArrayList.class) {
+            elementData = a;
+        } else {
+            elementData = Arrays.copyOf(a, size, Object[].class);
+        }
+    } else {
+        // replace with empty array.
+        elementData = EMPTY_ELEMENTDATA;
+    }
+}
+
+public Object clone() {
+    try {
+        ArrayList<?> v = (ArrayList<?>) super.clone();
+        v.elementData = Arrays.copyOf(elementData, size);
+        v.modCount = 0;
+        return v;
+    } catch (CloneNotSupportedException e) {
+        // this shouldn't happen, since we are Cloneable
+        throw new InternalError(e);
+    }
+}
+```
+Java의 ArrayList 클래스는 생성자에 Collection 상속 개체를 받거나 clone 메서드를 호출하면 리스트를 복제하여 새로운 리스트에 담아 리턴한다.   
+
+
+* 프로토 타입 패턴의 장점
+  - 객체를 생성할 때 고유의 비용이 주어진 프로그램에서 이 비용없이 새로운 객체를 만들 수 있게 한다.
+
+😊 How to Use : 객체를 생성하는 데 비용이 많이 들고, 비슷한 객체가 있는 경우 해당 패턴을 사용하자.
 ## Reference
 [백기선-코딩으로 학습하는 GoF의 디자인패턴](https://www.inflearn.com/course/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4/dashboard)     
 
