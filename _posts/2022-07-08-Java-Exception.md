@@ -71,9 +71,9 @@ java는 예외가 생길 때 처리할 수 있는 방법이 크게 2가지가 �
         }
     }
 ```
-0으로 나누는 과정에서 ArithmeticException이 발생하지만 메서드 B에서 예외를 처리하여 정상흐름으로 되돌린 뒤 리턴한다.
+0으로 나누는 과정에서 ArithmeticException이 발생하지만 메서드 B에서 예외를 처리하여 정상흐름으로 되돌린 뒤 리턴한다.   
 
-2. 예외를 호출한 곳으로 던지는 것이다.
+2. 예외를 호출한 곳으로 던지는 것이다.    
 ![exception2]({{ site.baseurl }}/assets/images/study/exception2.PNG)   
 ```java
     void A() {
@@ -81,9 +81,10 @@ java는 예외가 생길 때 처리할 수 있는 방법이 크게 2가지가 �
     }
 
     void B() throws ArithmeticException {
-        int b = 1 / 0; // 0으로 나눌 수 없어서 ArithmeticException 에러 발생
+        int b = 1 / 0;
+    // ArithmeticException 에러 발생한 것을 호출한 곳으로 던진
     }
-```
+```   
 에러난 메서드 B를 호출한 메서드 A로 에러를 던지는 것이다. 그러면 A 메서드에서 다시 try catch를 걸어주거나 다시 throws로 던지면 된다.   
 
 ## 2. Checked Exception UnChecked Exception
@@ -98,6 +99,11 @@ Checked Exception은 명시적으로 throws를 작성해야 하는 것이고 UnC
 
 * Checked Exception 과 UnChecked Exception 차이
 <table>
+    <colgroup>
+        <col width="10%">
+        <col width="10%">
+        <col width="10%">
+    </colgroup>
     <tr>
         <th></th>
         <th>Checked Exception</th>
@@ -105,7 +111,7 @@ Checked Exception은 명시적으로 throws를 작성해야 하는 것이고 UnC
     </tr>
     <tr>
         <td>구분</td>
-        <td>Exception의 하위 클래스 중 RuntimeException을 제외한 모든 예외</td>
+        <td>Exception의 하위 클래스 중 <br/>RuntimeException을 제외한 모든 예외</td>
         <td>RuntimeException 의 하위 예외</td>
     </tr>
     <tr>
