@@ -100,9 +100,9 @@ Checked Exception은 명시적으로 throws를 작성해야 하는 것이고 UnC
 * Checked Exception 과 UnChecked Exception 차이
 <table>
     <colgroup>
-        <col width="10%">
-        <col width="10%">
-        <col width="10%">
+        <col width="20%">
+        <col width="40%">
+        <col width="40%">
     </colgroup>
     <tr>
         <th></th>
