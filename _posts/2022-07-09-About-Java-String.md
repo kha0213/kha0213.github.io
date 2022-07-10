@@ -12,7 +12,7 @@ categories:
   - java
 tags:
   - String
-last_modified_at: 2022-07-08T00:40:00-00:00
+last_modified_at: 2022-07-09T00:40:00-00:00
 ---
 
 ## 1. 자바에서 String 클래스란?
