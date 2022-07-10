@@ -181,9 +181,84 @@ apache.commons.lang3 에선 java에서 사용하기 편한 다양한 Utils 클�
 {: .notice--info}   
      
 ### org.apache.commons.lang3.StringUtils
+기본적으로 null-safe 한 연산을 해주기 때문에 아주 유용하고 기본 String에는 없는 유용한 메서드들이 있다. (최근에 repeat(java 11) 같은 메서드들도 String에 기본으로 들어가 있긴 하지만 그래도 유용하다.)      
+😊아래는 개인적으로 자주 쓰는 메서드이다. 
+```java
+@Test
+void stringUtilTest() {
+    // null 이거나 "" 인 경우 true
+    assertTrue(StringUtils.isEmpty(""));
+    // 인자가 null일 경우 ""로 바꿔준다.
+    assertEquals("", StringUtils.defaultString(null));
+    // 인자의 string을 뒤집어 준다.
+    assertEquals("edcba", StringUtils.reverse("abcde"));
+    // 인자 String만큼 반복해준다.
+    assertEquals("*****", StringUtils.repeat("*", 5));
+    // 앞에 해당 char만큼 붙여준다. (숫자나 날짜 계산에 편하다)
+    assertEquals("0010", StringUtils.leftPad("10", 4, '0'));
+    // 알파벳만 있는지 검사해준다.
+    assertTrue(StringUtils.isAlpha("abcdddee"));
+}
+```
+전체 메서드이다. 특히 주석에 예제까지 굉장히 잘 달아놔서 공식문서 없이 그냥 사용해도 될 수준으로 잘 되어있으니 꼭 사용해보자.   
 
+* Is Empty/Is Blank - 문자열에 텍스트가 포함되어 있는지 확인합니다.
+* Trim/Strip - 앞 뒤에 공백 제거
+* Equals/Compare - 두 문자열을 비교합니다.
+* starts With - 문자열의 앞부분이 해당 단어로 시작하는지 확인합니다.
+* endsWith - 문자열이 뒷부분이 해당 당어로 끝나는지 확인합니다.
+* IndexOf/LastIndexOf/Contains - 문자열의 Index에 대한 검색입니다.
+* IndexOfAny/LastIndexOfAny/IndexOfAnyBut/LastIndexOfAnyBut - 문자열 인덱스 중 어느 것이라도 포함되는지 확인합니다.
+* ContainsOnly/ContainsNone/ContainsAny - 문자열에 이러한 문자만 포함/포함하지 않음/
+* Substring/Left/Right/Mid - 하위 문자열 추출입니다.
+* Substring Before/SubstringAfter/SubstringBetween - 다른 문자열에 대한 하위 문자열 추출
+* Split/Join - 문자열을 하위 문자열 배열로 분할하거나 그 반대로 분할합니다.
+* Remove/Delete - 문자열의 일부를 제거합니다.
+* Replace/Overlay - 문자열을 검색하고 한 문자열을 다른 문자열로 바꿉니다.
+* Chomp/Cop - 문자열의 마지막 부분을 제거합니다.
+* AdpendIfMissing - 없는 경우 문자열 끝에 해당 단어를 추가합니다.
+* PrependIfMissing - 없는 경우 문자열의 시작 부분에 해당 단어를 추가합니다.
+* LeftPad/RightPad/Center/Repeat - 문자열 패드
+* UpperCase/LowerCase/SwapCase/Capitalize/Uncapitalize - 문자열의 대소문자를 변경합니다.
+* CountMatches - 다른 문자열에서 한 문자열의 발생 횟수를 카운트합니다.
+* IsAlpha/IsNumeric/IsWhitespace/IsAsciiPrintable - 문자열의 문자를 확인합니다.
+* DefaultString - null 입력 문자열로부터 보호합니다.
+* Rotate - 문자열 회전(원형 이동)
+* Reverse/ReverseDelimited - 문자열을 역순으로 바꿉니다.
+* Abbreviate - 줄임말 또는 다른 주어진 문자열을 사용하여 문자열을 생략합니다.
+* Difference - 문자열과 해당 차이에 대한 보고서를 비교합니다.
+* Levenshtein Distance - 한 문자열을 다른 문자열로 변경하는 데 필요한 변경 횟수
+
+이 이외에도 apache.commons.lang3에서는 NumberUtils, ArrayUtils 등 정말 유용한 메서드들을 많이 정의해놓았다.   
+{: .notice--info}
 
 ### org.springframework.util.StringUtils
+기본적인 springframework 에서 가지고 있는 StringUtils이다. 위의 apache보단 기능이 부족하지만 그래도 어차피 사용하는 spring에만 의존적이기 때문에 유용할 경우가 많다.
+<pre>    
+Mainly for internal use within the framework; consider Apache's Commons Lang for a more comprehensive suite of String utilities.
+</pre>
+😊위와같이 문서에서도 Apache의 StringUtils가 더 기능이 많다고 나와있다.
+```java
+@Test
+void springStringUtils() {
+    // apache의 isEmpty와 비슷하다 null 이다 "" 이면 false 이다.
+    assertFalse(StringUtils.hasLength(""));
+    // apache의 isBlank와 비슷하다 null, "", "  " 이면 false이다.
+    assertFalse(StringUtils.hasText(""));
+
+    // collection의 string을 join한다.
+    List<String> list = List.of("apple", "banana", "lemon");
+    assertEquals("apple|banana|lemon", StringUtils.collectionToDelimitedString(list, "|"));
+    // 사실상 String의 join을 더 자주 쓰긴 한다.
+    assertEquals("apple|banana|lemon", String.join("|", list));
+
+    // 파일 이름을 출력한다 (확장자 포함)
+    assertEquals("test.txt",StringUtils.getFilename("D:/app/test.txt"));
+    // 파일 확장자만 출력한다.
+    assertEquals("txt",StringUtils.getFilenameExtension("D:/app/test.txt"));
+}
+```
+
 ## Reference
 [https://jeong-pro.tistory.com/85](https://jeong-pro.tistory.com/85)   
 [https://www.baeldung.com/java-string-pool](https://www.baeldung.com/java-string-pool)   
