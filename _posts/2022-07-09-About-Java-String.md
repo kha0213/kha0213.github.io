@@ -167,11 +167,6 @@ synchronized를 제외하고 나머지 사용법은 StringBuffer와 StringBuilde
     </tr>
 </table>
 
-## String 메서드 소개
-
-
-
-
 ## StringUtils
 java에서 String은 정말 많이 다루다 보니 이를 쉽게 활용할 수 있는 StringUtils 클래스가 많이 있다 대표적으로 
 springframework에서 기본적으로 포함된 StringUtils와 apache.commons.lang3에서 만든 StringUtils를 살펴보자.      
@@ -235,7 +230,9 @@ void stringUtilTest() {
 ### org.springframework.util.StringUtils
 기본적인 springframework 에서 가지고 있는 StringUtils이다. 위의 apache보단 기능이 부족하지만 그래도 어차피 사용하는 spring에만 의존적이기 때문에 유용할 경우가 많다.
 <pre>    
-Mainly for internal use within the framework; consider Apache's Commons Lang for a more comprehensive suite of String utilities.
+Mainly for internal use within the framework; 
+consider Apache's Commons Lang for a more 
+comprehensive suite of String utilities.
 </pre>
 😊위와같이 문서에서도 Apache의 StringUtils가 더 기능이 많다고 나와있다.
 ```java
