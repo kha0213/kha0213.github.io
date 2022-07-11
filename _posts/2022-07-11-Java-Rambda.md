@@ -12,7 +12,8 @@ categories:
   - java
 tags:
   - Rambda
-last_modified_at: 2022-07-10T00:40:00-00:00
+last_modified_at: 2022-07-11T00:40:00-00:00
 ---
 
 ## 1. Java 1.8
+
