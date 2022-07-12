@@ -9,9 +9,9 @@ toc_sticky : true
 classes: wide
 
 categories:
-  - Spring
+  - spring
 tags:
-  - Spring security
+  - spring security
 last_modified_at: 2022-07-12T00:40:00-00:00
 ---
 

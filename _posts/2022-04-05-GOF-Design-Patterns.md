@@ -11,7 +11,7 @@ classes: wide
 categories:
   - java
 tags:
-  - Design_Patterns
+  - design patterns
 last_modified_at: 2022-04-05T00:40:00-00:00
 ---
 

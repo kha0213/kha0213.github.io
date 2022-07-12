@@ -11,7 +11,7 @@ classes: wide
 categories:
   - java
 tags:
-  - String
+  - string
 last_modified_at: 2022-07-09T00:40:00-00:00
 ---
 

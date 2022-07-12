@@ -1,5 +1,5 @@
 ---
-title:  "Java의 람다 사용법"
+title:  "Java의 람다 사용법(작성중)"
 
 toc: true
 toc_label: "go page"
@@ -11,7 +11,7 @@ classes: wide
 categories:
   - java
 tags:
-  - Rambda
+  - rambda
 last_modified_at: 2022-07-11T00:40:00-00:00
 ---
 
