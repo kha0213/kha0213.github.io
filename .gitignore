@@ -39,3 +39,4 @@ _config.yml
 /.gradle/6.7/fileChanges/last-build.bin
 .idea/runConfigurations.xml
 .idea
+.idea/git_toolbox_prj.xml
