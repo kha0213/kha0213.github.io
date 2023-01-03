@@ -1,13 +1,45 @@
 ---
-title:  "JAVA Functional Interface"
+title:  "JAVA 8 Lambda and Stream"
 
 categories: 
   - java
 tags:
-  - html
+  - java8
   - study
-last_modified_at: 2021-01-13T00:10:00-00:00
+last_modified_at: 2023-01-03T00:10:00-00:00
 ---
+# Java 8
+자바 8에 들어서 굉장히 많은 변화가 있었다. 그 중 가장 큰 변화는 Java도 함수형 프로그래밍을 지원하게 되었다는 것이다.   
+기존에 익명 클래스로 작성해서 할 수 있었지만 코드 양이 많아 직관적이지 않고 코드가 불필요하게 길어졌는데 이를 람다와 스트림으로 깔끔하게 정리할 수 있었다.   
+지금부터 람다와 스트림 사용방법을 간단히 알아보자.
+
+## Java Lambda 사용법
+자바 8이상 에서는 메서드를 일급값으로 취급할 수 있다. 즉 함수도 값으로 취급할 수 있다.   
+예를 들어 인수로 (int x) -> x + 1 이라는 값을 넘기면 x라는 인수를 호출하면 x + 1 을 반환 하는 동작을 수행하도록 코드로 구현할 수 있다.
+간단한 예를 들어 알아보자.
+```java
+void param_fun() {
+    int cal1 = cal(10, 5, (Integer x, Integer y) -> x + y); // 15
+    int cal2 = cal(10, 5, (Integer x, Integer y) -> x - y); // 5
+    int cal3 = cal(10, 5, (Integer x, Integer y) -> x * y); // 50
+    int cal4 = cal(10, 5, (Integer x, Integer y) -> x / y); // 2
+}
+
+private int cal(int x, int y, BiFunction<Integer, Integer, Integer> biFunction) {
+    return biFunction.apply(x, y);
+}
+```
+이렇게 cal이라는 함수 구현하는 방법을 인수로 넘겨서 그 결과를 리턴받을 수 있다.   
+
+람다 표현식의 특징을 알아보자.
+* 익명 : 보통의 메서드와 달리 람다 표현식은 이름이 없으므로 "익명" 이다. 따라서 재사용이 안되고 간결하게 표현해야 한다.
+* 함수 : 람다는 특정 클래스에 종속되지 않으므로 "함수"라고 부른다.
+* 전달 : 람다 표현식을 메서드 인수로 전달하거나 변수에 할당할 수 있다.
+* 간결성 : 구현 부분만 간결하게 적으면 추론에 의해 작동한다.
+
+
+
+
 
 ## Functional Interface (함수형 인터페이스)<br>
 * Functional Interface란 '구현해야 할 추상 메서드가 하나만 정의된 인터페이스'를 가리킨다.   

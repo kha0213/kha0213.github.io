@@ -34,7 +34,7 @@ javax.persistance 패키지로 정의 된 API 그 자체를 말한다.
 [javax.persistance docs](https://docs.oracle.com/javaee/7/api/javax/persistence/package-summary.html)   
 ### 2. The query language
 JPQL (Java Persistence Query Language)   
-SQL이 (Structured Query Language) 테이블을 대상으로 질의하는 것이라면 JPQL은 객체를 대상의로 쿼리를 질의한다.   
+SQL이 (Structured Query Language) 테이블을 대상으로 질의하는 것이라면 JPQL은 객체를 대상으로 쿼리를 질의한다.   
 
 
 [쿼리문 비교]   
