@@ -37,7 +37,32 @@ private int cal(int x, int y, BiFunction<Integer, Integer, Integer> biFunction) 
 * 전달 : 람다 표현식을 메서드 인수로 전달하거나 변수에 할당할 수 있다.
 * 간결성 : 구현 부분만 간결하게 적으면 추론에 의해 작동한다.
 
+### 람다 표현식 작성방법
+람다 표현식은 파라미터 리스트, 화살표, 람다 바디로 이루어진다.   
+![lambda.example]({{ site.baseurl }}/assets/images/study/lambda.example.png)   
+람다에도 여러 줄로 실행이 될 때 {} 를 사용할 수 있지만 그러면 마지막에 세미콜론(;)을 붙여야한다.
 
+Ex)
+```java
+int square(int x) {
+    return x * x;
+}
+/*
+    1. (int x) -> x * x	// type이 있으므로 괄호( ) 생략 불가
+    2. (x) -> x * x	// type 생략 가능
+    3. x -> x * x	// type이 없고, parameter가 1개이므로 괄호 ( ) 생략 가능
+ */
+    
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+/*
+    1. (int a, int b) -> { return a > b ? a : b; }
+    2. (int a, int b) -> a > b ? a : b		// type이 있으므로 괄호( ) 생략 불가
+    3. (a, b) -> a > b ? a : b			// parameter가 2개이므로 괄호( ) 생략 불가
+*/
+    
+```
 
 
 
