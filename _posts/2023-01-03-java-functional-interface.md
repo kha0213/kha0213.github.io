@@ -312,7 +312,7 @@ reduce((num1, num2) -> num1 + num2);
 int sum = reduce.get();
 ```
 
-참조 : https://hbase.tistory.com/78
-
-참조 : https://madplay.github.io/post/java-streams-intermediate-operations
+## Reference
+[https://hbase.tistory.com/78](https://hbase.tistory.com/78)   
+[https://madplay.github.io/post/java-streams-intermediate-operations](https://madplay.github.io/post/java-streams-intermediate-operations)   
 
