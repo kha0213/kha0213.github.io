@@ -95,7 +95,7 @@ String result = sb.toString();
 2. Map : key-value pair 형태로 저장하기 위한 인터페이스이다. 키는 고유하고, 하나의 키에 하나의 값이 매핑된다.
     1. **HashMap** : 빠른 검색, 삽입, 삭제가 필요한 경우. 
         * 키와 값을 저장하기 위해 해시 테이블을 사용한다.
-        * null 키와 null 값을 허용합니다.
+        * null 키와 null 값을 허용한다.
         * TreeMap
     2. LinkedHashMap : 데이터의 순서를 유지하면서 해시 기반 성능이 필요한 경우.
         * HashMap과 유사하지만, 입력된 순서를 유지한다.
@@ -150,7 +150,7 @@ public void addItem(String item) {
 
 ### **2.1 Garbage Collection 튜닝**
 
-- JVM 힙 크기를 적절히 설정해야 합니다.
+- JVM 힙 크기를 적절히 설정해야 한다.
     - `-Xms` 옵션으로 초기 힙 크기를 설정하고, `-Xmx` 옵션으로 최대 힙 크기를 설정.
 
 #### **JVM 옵션 예시**:
@@ -276,31 +276,70 @@ SELECT id, username FROM users WHERE username = 'john';
 ## **6. 캐싱**
 
 ### **6.1 애플리케이션 캐싱**
+- `Ehcache`, `Caffeine`과 같은 인메모리 캐시를 사용하여 성능을 개선할 수 있다.   
 
-- `Ehcache`, `Caffeine`과 같은 인메모리 캐시를 사용하여 성능을 개선할 수 있다.
+대표적으로 Ehcache에 대해서 살펴보자.
+**Ehcache**는 자바 애플리케이션에서 캐싱을 제공하는 가장 널리 사용되는 캐시 라이브러리 중 하나이다.  
+Ehcache는 데이터를 메모리에 저장하여 데이터베이스 호출을 줄이고, 애플리케이션 성능을 향상시킨다.  
+또한, 디스크 저장, 분산 캐싱, 클러스터링, 통합된 JSR-107(JCache) 지원 등을 제공하는 강력한 캐싱 솔루션이다.
 
-#### **코드 예시**:
-```java
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+---
 
-public class CaffeineExample {
-    public static void main(String[] args) {
-        Cache<String, String> cache = Caffeine.newBuilder()
-                                               .maximumSize(100)
-                                               .build();
+#### Ehcache의 주요 특징
 
-        cache.put("key", "value");
-        System.out.println(cache.getIfPresent("key"));
-    }
-}
-```
+1. **고성능**: 메모리와 디스크 기반 캐싱을 지원하여 빠른 데이터 접근 가능.
+2. **확장성**: 단일 노드에서 분산 환경까지 유연하게 확장 가능.
+3. **다양한 캐시 저장소**:
+    - **Heap (메모리)**: 가장 빠른 데이터 접근.
+    - **Off-Heap**: JVM 외부 메모리를 사용하여 GC(가비지 컬렉션)의 영향을 줄임.
+    - **Disk**: 영구 데이터 저장.
+4. **통합성**: Spring, Hibernate 등 다양한 프레임워크와 쉽게 통합 가능.
+5. **표준 준수**: JSR-107 표준을 지원하여 다양한 캐시 구현체와의 호환 가능.
 
 ---
 
 ## **7. 프로파일링 및 모니터링**
 
 ### **7.1 프로파일링 도구**
+VisualVM, JProfiler, YourKit과 같은 도구를 사용하여 병목 구간을 분석할 수 있다.   
+대표적으로 VisualVM 에 대해 알아보자.
 
-- VisualVM, JProfiler, YourKit과 같은 도구를 사용하여 병목 구간을 분석할 수 있다.
+---
+설치 방법
+- [VisualVM 다운로드 페이지](https://visualvm.github.io/)에서 설치 가능. (Intellij의 VisualVM Launcher 플러그인으로 쉽게 IDE와 연결해서 볼 수 있다)
+- VM 옵션을 추가
+  ```bash
+  -Dcom.sun.management.jmxremote
+  -Dcom.sun.management.jmxremote.port=9090
+  -Dcom.sun.management.jmxremote.authenticate=false
+  -Dcom.sun.management.jmxremote.ssl=false
+  ```
+- 애플리케이션 실행 후 VisualVM Launcher 아이콘을 누르면 지표 확인 가능하다.
+---
 
+기능
+
+VisualVM의 주요 기능은 다음과 같다:
+
+### (1) Overview
+- **JVM 정보**: JVM 버전, 애플리케이션 경로 등 확인.
+- **메모리 정보**: 힙 메모리 및 메타스페이스 사용량.
+
+### (2) Monitor
+- **Heap Usage**: 힙 메모리 사용량을 실시간으로 추적.
+- **Threads**: 스레드 수 및 상태 확인.
+- **GC 활동**: Garbage Collection 활동 분석.
+
+### (3) Threads
+- **스레드 상태 분석**: 실행 중인 스레드 상태 및 스택 추적.
+
+### (4) Sampler
+- **CPU 및 메모리 사용량 샘플링**: 가장 많은 자원을 사용하는 메서드 분석.
+
+**TIP:** VisualVM은 JDK 9 이상에서 더 강력한 기능을 제공한다. (Unified Logging, G1GC 개선, JPMS 지원, JFR 통합)
+원격 애플리케이션 모니터링을 위해 JMX를 활성화, SSH 터널링을 사용가능하다.
+{: .notice--info}
+
+### **7.2 모니터링 도구**
+- Spring Boot Actuator 등을 사용하면 실시간적인 모니터링을 할 수 있다.
+  참조 : [https://kha0213.github.io/spring/spring-actuator/](https://kha0213.github.io/spring/spring-actuator/)    
